@@ -13,12 +13,25 @@ class Node {
  public:
   K key;
   V value;
+
+  Node(const K& key, const V& value);
 };
 
 template <typename K, typename V>
+Node<K, V>::Node(const K& key, const V& value) : key(key), value(value) {}
+
+template <typename K, typename V>
 class HashTable {
+ public:
+  using KeyValueType = K;
+  using KeyPointerValueType = K*;
+  using KeyReferenceValueType = K&;
+  using ValueType = V;
+  using ValuePointerType = V*;
+  using ValueReferenceType = V&;
+
  private:
-  Node** nodes;
+  Node<K, V>** nodes;
   int size;
   int count;
 
@@ -32,6 +45,8 @@ class HashTable {
   HashTable<K, V>& operator=(HashTable<K, V>&&);
 
   int Hash(const std::string& key);
+
+  void Insert(const K& key, const V& value);
 };
 
 template <typename K, typename V>
@@ -44,6 +59,11 @@ int HashTable<K, V>::Hash(const std::string& key) {
   }
 
   return hash;
+}
+
+template <typename K, typename V>
+void HashTable<K, V>::Insert(const K& key, const V& value) {
+  Node<K, V>* node = new Node<K, V>;
 }
 
 #endif
