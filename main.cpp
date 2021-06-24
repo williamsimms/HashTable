@@ -1,14 +1,11 @@
-#include <functional>
 #include <iostream>
 #include <unordered_map>
 #include <vector>
 
-#include "unorderedmap.h"
+#include "hashtable.h"
 
 using namespace std;
 
-int main() {
-  cout << "Hello World" << endl;
-
+int main(void) {
   return 0;
 }
