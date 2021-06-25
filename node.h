@@ -4,27 +4,27 @@
 #include <iostream>
 #include <utility>
 
-using std::move;
-
 template <typename K, typename V>
 class Node {
-  template <typename U>
-  friend std::ostream& operator<<(std::ostream& os, const Node<U>& node);
+  template <typename W, typename X>
+  friend std::ostream& operator<<(std::ostream& os, const Node<W, X>& node);
 
  public:
-  T data;
-  Node<T>* previous;
-  Node<T>* next;
+  V data;
+  Node<K, V>* previous;
+  Node<K, V>* next;
 
-  explicit Node(T data, Node<T>* previous = nullptr, Node<T>* next = nullptr);
-  Node(const Node<T>&);
-  Node(Node<T>&&);
+  explicit Node(V data,
+                Node<K, V>* previous = nullptr,
+                Node<K, V>* next = nullptr);
+  Node(const Node<K, V>&);
+  Node(Node<K, V>&&);
   ~Node();
-  T Data() const;
-  void SetData(T data);
-  void SetNext(Node<T>* next);
+  V Data() const;
+  void SetData(V data);
+  void SetNext(Node<K, V>* next);
   void Print();
-  void SetPrevious(Node<T>* previous);
+  void SetPrevious(Node<K, V>* previous);
 
   bool operator==(const Node& rhs) const {
     if (this->data == rhs.data) {
@@ -50,56 +50,58 @@ class Node {
     return false;
   }
 
-  Node<T>& operator=(const Node<T>& rhs);
-  Node<T>& operator=(Node<T>&& rhs);
+  Node<K, V>& operator=(const Node<K, V>& rhs);
+  Node<K, V>& operator=(Node<K, V>&& rhs);
 };
 
-template <typename T>
-Node<T>::Node(T data, Node<T>* previous, Node<T>* next)
-    : data{move(data)}, previous{move(previous)}, next{move(next)} {}
+template <typename K, typename V>
+Node<K, V>::Node(V data, Node<K, V>* previous, Node<K, V>* next)
+    : data{std::move(data)},
+      previous{std::move(previous)},
+      next{std::move(next)} {}
 
-template <typename T>
-Node<T>::~Node() = default;
+template <typename K, typename V>
+Node<K, V>::~Node() = default;
 
-template <typename T>
-Node<T>::Node(const Node<T>&) = default;
+template <typename K, typename V>
+Node<K, V>::Node(const Node<K, V>&) = default;
 
-template <typename T>
-Node<T>::Node(Node<T>&&) = default;
+template <typename K, typename V>
+Node<K, V>::Node(Node<K, V>&&) = default;
 
-template <typename T>
-T Node<T>::Data() const {
+template <typename K, typename V>
+V Node<K, V>::Data() const {
   return this->data;
 }
 
-template <typename T>
-Node<T>& Node<T>::operator=(const Node<T>& rhs) = default;
+template <typename K, typename V>
+Node<K, V>& Node<K, V>::operator=(const Node<K, V>& rhs) = default;
 
-template <typename T>
-Node<T>& Node<T>::operator=(Node<T>&& rhs) = default;
+template <typename K, typename V>
+Node<K, V>& Node<K, V>::operator=(Node<K, V>&& rhs) = default;
 
-template <typename T>
-void Node<T>::SetPrevious(Node<T>* previousNode) {
+template <typename K, typename V>
+void Node<K, V>::SetPrevious(Node<K, V>* previousNode) {
   this->previous = previousNode;
 }
 
-template <typename T>
-void Node<T>::SetNext(Node<T>* nextNode) {
+template <typename K, typename V>
+void Node<K, V>::SetNext(Node<K, V>* nextNode) {
   this->next = nextNode;
 }
 
-template <typename T>
-void Node<T>::SetData(T newData) {
+template <typename K, typename V>
+void Node<K, V>::SetData(V newData) {
   this->data = newData;
 }
 
-template <typename T>
-void Node<T>::Print() {
+template <typename K, typename V>
+void Node<K, V>::Print() {
   std::cout << this->data << std::endl;
 }
 
-template <typename T>
-std::ostream& operator<<(std::ostream& os, const Node<T>& node) {
+template <typename K, typename V>
+std::ostream& operator<<(std::ostream& os, const Node<K, V>& node) {
   os << node.GetData();
   return os;
 }
