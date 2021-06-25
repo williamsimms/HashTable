@@ -137,7 +137,10 @@ TEST_CASE("Appends Many Nodes to the Start Of The List",
 TEST_CASE("Appends Many Nodes to the End Of The List", "[Insert Many At End]") {
   LinkedList<int, int> list;
 
-  list.InsertManyAtEnd({1, 5, 6, 2});
+  list.PushBack(1, 1);
+  list.PushBack(1, 5);
+  list.PushBack(1, 6);
+  list.PushBack(1, 2);
 
   REQUIRE(list.Size() == 4);
 
@@ -146,7 +149,10 @@ TEST_CASE("Appends Many Nodes to the End Of The List", "[Insert Many At End]") {
   REQUIRE(list.At(2)->value == 6);
   REQUIRE(list.At(3)->value == 2);
 
-  list.InsertManyAtEnd({4, 2, 5, 7});
+  list.PushBack(1, 4);
+  list.PushBack(1, 2);
+  list.PushBack(1, 5);
+  list.PushBack(1, 7);
 
   REQUIRE(list.Size() == 8);
 
@@ -229,15 +235,20 @@ TEST_CASE(
 TEST_CASE("Returns the first Node of the Linked List", "[Get Head]") {
   LinkedList<int, int> list;
 
-  list.InsertManyAtStart({1, 2, 3, 4, 5, 6});
+  list.PushFront(1, 1);
+  list.PushFront(1, 2);
+  list.PushFront(1, 3);
+  list.PushFront(1, 4);
+  list.PushFront(1, 5);
+  list.PushFront(1, 6);
 
   REQUIRE(list.Head()->value == 6);
 
-  list.PushBack(12,(5);
+  list.PushBack(12, 5);
 
   REQUIRE(list.Head()->value == 6);
 
-  list.PushFront(12,11);
+  list.PushFront(12, 11);
 
   REQUIRE(list.Head()->value == 11);
 }
@@ -245,19 +256,24 @@ TEST_CASE("Returns the first Node of the Linked List", "[Get Head]") {
 TEST_CASE("Returns the last Node of the Linked List", "[Get Last]") {
   LinkedList<int, int> list;
 
-  list.InsertManyAtStart({1, 2, 3, 4, 5, 6});
+  list.PushFront(1, 1);
+  list.PushFront(1, 2);
+  list.PushFront(1, 3);
+  list.PushFront(1, 4);
+  list.PushFront(1, 5);
+  list.PushFront(1, 6);
 
   REQUIRE(list.Tail()->value == 1);
 
-  list.PushBack(12,(5);
+  list.PushBack(12, 5);
 
   REQUIRE(list.Tail()->value == 5);
 
-  list.PushFront(12,11);
+  list.PushFront(12, 11);
 
   REQUIRE(list.Tail()->value == 5);
 
-  list.PushBack(12,(14);
+  list.PushBack(12, 14);
 
   REQUIRE(list.Tail()->value == 14);
 }
@@ -265,7 +281,12 @@ TEST_CASE("Returns the last Node of the Linked List", "[Get Last]") {
 TEST_CASE("Empties the Linked List", "[Clear]") {
   LinkedList<int, int> list;
 
-  list.InsertManyAtStart({1, 2, 3, 4, 5, 6});
+  list.PushFront(1, 1);
+  list.PushFront(1, 2);
+  list.PushFront(1, 3);
+  list.PushFront(1, 4);
+  list.PushFront(1, 5);
+  list.PushFront(1, 6);
 
   REQUIRE(list.Size() == 6);
 
@@ -290,7 +311,7 @@ TEST_CASE("Removes the Head Node", "[Remove Head]") {
 
     list.PushFront(12, 4);
     list.PushFront(12, 3);
-    list.PushBack(12,(8);
+    list.PushBack(12, 8);
 
     REQUIRE(list.Size() == 3);
     REQUIRE(list.Head()->value == 3);
@@ -463,10 +484,10 @@ TEST_CASE("Removes the node at the specified Index.", "[Remove At]") {
   SECTION("Remove At deletes the first node.") {
     LinkedList<int, int> list;
 
-    list.PushBack(12,(1);
-    list.PushBack(12,(2);
-    list.PushBack(12,(3);
-    list.PushBack(12,(4);
+    list.PushBack(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
+    list.PushBack(12, 4);
 
     REQUIRE(list.At(0)->value == 1);
 
@@ -478,10 +499,10 @@ TEST_CASE("Removes the node at the specified Index.", "[Remove At]") {
   SECTION("Remove At deletes the node at the specified index.") {
     LinkedList<int, int> list;
 
-    list.PushBack(12,(1);
-    list.PushBack(12,(2);
-    list.PushBack(12,(3);
-    list.PushBack(12,(4);
+    list.PushBack(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
+    list.PushBack(12, 4);
 
     REQUIRE(list.At(1)->value == 2);
 
@@ -493,10 +514,10 @@ TEST_CASE("Removes the node at the specified Index.", "[Remove At]") {
   SECTION("Remove At deletes the last node of the linked list.") {
     LinkedList<int, int> list;
 
-    list.PushBack(12,(1);
-    list.PushBack(12,(2);
-    list.PushBack(12,(3);
-    list.PushBack(12,(4);
+    list.PushBack(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
+    list.PushBack(12, 4);
 
     REQUIRE(list.At(3)->value == 4);
 
@@ -511,7 +532,7 @@ TEST_CASE("Inserts a New Node at the Specified Index.", "[Insert At]") {
       "Inserts a new node with value at the 0 index when the list is empty.") {
     LinkedList<int, int> list;
 
-    list.PushAt(5, 0);
+    list.PushAt(1, 5, 0);
 
     REQUIRE(list.Head()->value == 5);
   }
@@ -525,7 +546,7 @@ TEST_CASE("Inserts a New Node at the Specified Index.", "[Insert At]") {
     list.PushFront(12, 4);
     list.PushFront(12, 7);
 
-    list.PushAt(5, 0);
+    list.PushAt(1, 5, 0);
 
     REQUIRE(list.At(0)->value == 5);
     REQUIRE(list.At(1)->value == 7);
@@ -536,12 +557,12 @@ TEST_CASE("Inserts a New Node at the Specified Index.", "[Insert At]") {
   SECTION("Inserts a new node at the middle index of the list.") {
     LinkedList<int, int> list;
 
-    list.PushBack(12,(2);
-    list.PushBack(12,(7);
-    list.PushBack(12,(3);
-    list.PushBack(12,(4);
+    list.PushBack(12, 2);
+    list.PushBack(12, 7);
+    list.PushBack(12, 3);
+    list.PushBack(12, 4);
 
-    list.PushAt(9, 2);
+    list.PushAt(1, 9, 2);
 
     REQUIRE(list.At(0)->value == 2);
     REQUIRE(list.At(1)->value == 7);
@@ -553,10 +574,10 @@ TEST_CASE("Inserts a New Node at the Specified Index.", "[Insert At]") {
   SECTION("Inserts a new node with value at the last index.") {
     LinkedList<int, int> list;
 
-    list.PushBack(12,(2);
-    list.PushBack(12,(7);
+    list.PushBack(12, 2);
+    list.PushBack(12, 7);
 
-    list.PushAt(3, 2);
+    list.PushAt(1, 3, 2);
 
     REQUIRE(list.At(0)->value == 2);
     REQUIRE(list.At(1)->value == 7);
@@ -568,10 +589,10 @@ TEST_CASE("Inserts a New Node at the Specified Index.", "[Insert At]") {
       "zero.") {
     LinkedList<int, int> list;
 
-    list.PushBack(12,(2);
-    list.PushBack(12,(7);
+    list.PushBack(12, 2);
+    list.PushBack(12, 7);
 
-    list.PushAt(5, -4);
+    list.PushAt(1, 5, -4);
 
     REQUIRE(list.At(0)->value == 5);
     REQUIRE(list.At(1)->value == 2);
@@ -583,10 +604,10 @@ TEST_CASE("Inserts a New Node at the Specified Index.", "[Insert At]") {
       "than N-1") {
     LinkedList<int, int> list;
 
-    list.PushBack(12,(2);
-    list.PushBack(12,(7);
+    list.PushBack(12, 2);
+    list.PushBack(12, 7);
 
-    list.PushAt(5, 12);
+    list.PushAt(1, 5, 12);
 
     REQUIRE(list.At(0)->value == 2);
     REQUIRE(list.At(1)->value == 7);
@@ -605,7 +626,11 @@ TEST_CASE("Returns true if the list is empty, false otherwise", "[Is Empty]") {
 
   SECTION("Returns true if the list is empty") {
     LinkedList<int, int> list;
-    list.InsertManyAtStart({1, 2, 3, 4, 5});
+    list.PushFront(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
+    list.PushBack(12, 4);
+    list.PushBack(12, 5);
 
     REQUIRE(list.Size() == 5);
 
@@ -625,7 +650,12 @@ TEST_CASE("Updates the specified index with the provided value.",
 
   SECTION("Returns false if the index is less than zero.") {
     LinkedList<int, int> list;
-    list.InsertManyAtStart({1, 2, 3, 4, 5});
+
+    list.PushFront(12, 1);
+    list.PushFront(12, 2);
+    list.PushFront(12, 3);
+    list.PushFront(12, 4);
+    list.PushFront(12, 5);
 
     bool updateIndex = list.UpdateIndex(25, -5);
 
@@ -634,7 +664,12 @@ TEST_CASE("Updates the specified index with the provided value.",
 
   SECTION("Returns false if the index is greater than N-1.") {
     LinkedList<int, int> list;
-    list.InsertManyAtStart({1, 2, 3, 4, 5});
+
+    list.PushFront(12, 1);
+    list.PushFront(12, 2);
+    list.PushFront(12, 3);
+    list.PushFront(12, 4);
+    list.PushFront(12, 5);
 
     bool updateIndex = list.UpdateIndex(25, 223);
 
@@ -643,7 +678,11 @@ TEST_CASE("Updates the specified index with the provided value.",
 
   SECTION("Returns true and updates the index with the supplied value.") {
     LinkedList<int, int> list;
-    list.InsertManyAtStart({5, 3, 6, 11});
+
+    list.PushFront(12, 5);
+    list.PushFront(12, 3);
+    list.PushFront(12, 6);
+    list.PushFront(12, 11);
 
     bool updateIndexZero = list.UpdateIndex(22, 0);
     bool updateIndexOne = list.UpdateIndex(5, 1);
@@ -726,7 +765,17 @@ TEST_CASE("Returns the amount of times the value occurs within the list",
       "Returns the number of times the specifies value appears in the list.") {
     LinkedList<int, int> list;
 
-    list.InsertManyAtStart({5, 5, 5, 5, 3, 6, 6, 6, 11, 11, 22});
+    list.PushFront(12, 5);
+    list.PushFront(12, 5);
+    list.PushFront(12, 5);
+    list.PushFront(12, 5);
+    list.PushFront(12, 3);
+    list.PushFront(12, 6);
+    list.PushFront(12, 6);
+    list.PushFront(12, 6);
+    list.PushFront(12, 11);
+    list.PushFront(12, 11);
+    list.PushFront(12, 22);
 
     int countFive = list.Count(5);
     int countThree = list.Count(3);
@@ -740,7 +789,12 @@ TEST_CASE("Returns the amount of times the value occurs within the list",
     REQUIRE(countEleven == 2);
     REQUIRE(countTwentyTwo == 1);
 
-    list.InsertManyAtStart({5, 3, 11, 22, 6, 6});
+    list.PushFront(12, 5);
+    list.PushFront(12, 3);
+    list.PushFront(12, 11);
+    list.PushFront(12, 22);
+    list.PushFront(12, 6);
+    list.PushFront(12, 6);
 
     countFive = list.Count(5);
     countThree = list.Count(3);
@@ -885,7 +939,11 @@ TEST_CASE("Returns the element at the tail position,nullptr otherwise.",
 
     REQUIRE(list.Tail()->value == 4);
 
-    list.InsertManyAtStart({1, 2, 3, 4, 5});
+    list.PushFront(12, 1);
+    list.PushFront(12, 2);
+    list.PushFront(12, 3);
+    list.PushFront(12, 4);
+    list.PushFront(12, 5);
 
     REQUIRE(list.Tail()->value == 4);
   }
@@ -905,12 +963,19 @@ TEST_CASE("Returns true if the lists have exactly the same value & length.",
 
   SECTION("Returns false if the sizes of the two lists differ.") {
     LinkedList<int, int> list;
-    list.PushBack(12,(1);
-    list.PushBack(12,(2);
-    list.PushBack(12,(3);
+    list.PushBack(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
 
     LinkedList<int, int> otherList;
-    otherList.InsertManyAtEnd({1, 2, 3, 4, 5, 6, 7});
+
+    otherList.PushBack(12, 1);
+    otherList.PushBack(12, 2);
+    otherList.PushBack(12, 3);
+    otherList.PushBack(12, 4);
+    otherList.PushBack(12, 5);
+    otherList.PushBack(12, 6);
+    otherList.PushBack(12, 7);
 
     bool listEquals = list == otherList;
     REQUIRE(listEquals == false);
@@ -920,14 +985,14 @@ TEST_CASE("Returns true if the lists have exactly the same value & length.",
       "Returns false if the sizes of the list are the same but the value is "
       "different.") {
     LinkedList<int, int> list;
-    list.PushBack(12,(1);
-    list.PushBack(12,(2);
-    list.PushBack(12,(3);
+    list.PushBack(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
 
     LinkedList<int, int> otherList;
-    otherList.PushBack(12,(1);
-    otherList.PushBack(12,(2);
-    otherList.PushBack(12,(4);
+    otherList.PushBack(12, 1);
+    otherList.PushBack(12, 2);
+    otherList.PushBack(12, 4);
 
     bool listEquals = list == otherList;
     REQUIRE(listEquals == false);
@@ -937,14 +1002,14 @@ TEST_CASE("Returns true if the lists have exactly the same value & length.",
       "Returns true if the sizes of the list are the same and the value is the "
       "same.") {
     LinkedList<int, int> list;
-    list.PushBack(12,(1);
-    list.PushBack(12,(2);
-    list.PushBack(12,(3);
+    list.PushBack(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
 
     LinkedList<int, int> otherList;
-    otherList.PushBack(12,(1);
-    otherList.PushBack(12,(2);
-    otherList.PushBack(12,(3);
+    otherList.PushBack(12, 1);
+    otherList.PushBack(12, 2);
+    otherList.PushBack(12, 3);
 
     bool listEquals = list == otherList;
     REQUIRE(listEquals == true);
@@ -964,12 +1029,19 @@ TEST_CASE("Returns true if the lists are different.", "[Operator!=]") {
 
   SECTION("Returns true if the sizes of the two lists differ.") {
     LinkedList<int, int> list;
-    list.PushBack(12,(1);
-    list.PushBack(12,(2);
-    list.PushBack(12,(3);
+    list.PushBack(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
 
     LinkedList<int, int> otherList;
-    otherList.InsertManyAtEnd({1, 2, 3, 4, 5, 6, 7});
+
+    list.PushBack(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
+    list.PushBack(12, 4);
+    list.PushBack(12, 5);
+    list.PushBack(12, 6);
+    list.PushBack(12, 7);
 
     bool listEquals = list != otherList;
     REQUIRE(listEquals == true);
@@ -979,14 +1051,14 @@ TEST_CASE("Returns true if the lists are different.", "[Operator!=]") {
       "Returns true if the sizes of the list are the same but the value is "
       "different.") {
     LinkedList<int, int> list;
-    list.PushBack(12,(1);
-    list.PushBack(12,(2);
-    list.PushBack(12,(3);
+    list.PushBack(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
 
     LinkedList<int, int> otherList;
-    otherList.PushBack(12,(1);
-    otherList.PushBack(12,(2);
-    otherList.PushBack(12,(4);
+    otherList.PushBack(12, 1);
+    otherList.PushBack(12, 2);
+    otherList.PushBack(12, 4);
 
     bool listEquals = list != otherList;
     REQUIRE(listEquals == true);
@@ -997,14 +1069,14 @@ TEST_CASE("Returns true if the lists are different.", "[Operator!=]") {
       "the "
       "same.") {
     LinkedList<int, int> list;
-    list.PushBack(12,(1);
-    list.PushBack(12,(2);
-    list.PushBack(12,(3);
+    list.PushBack(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
 
     LinkedList<int, int> otherList;
-    otherList.PushBack(12,(1);
-    otherList.PushBack(12,(2);
-    otherList.PushBack(12,(3);
+    otherList.PushBack(12, 1);
+    otherList.PushBack(12, 2);
+    otherList.PushBack(12, 3);
 
     bool listEquals = list != otherList;
     REQUIRE(listEquals == false);
@@ -1071,7 +1143,13 @@ TEST_CASE(
     "[operator-=]") {
   LinkedList<int, int> list;
 
-  list.InsertManyAtEnd({1, 2, 3, 4, 5, 6, 7});
+  list.PushBack(1, 1);
+  list.PushBack(1, 2);
+  list.PushBack(1, 3);
+  list.PushBack(1, 4);
+  list.PushBack(1, 5);
+  list.PushBack(1, 6);
+  list.PushBack(1, 7);
 
   REQUIRE(list.Size() == 7);
 
