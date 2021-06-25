@@ -15,7 +15,8 @@ class Node {
   Node<K, V>* previous;
   Node<K, V>* next;
 
-  explicit Node(V value,
+  explicit Node(K key,
+                V value,
                 Node<K, V>* previous = nullptr,
                 Node<K, V>* next = nullptr);
   Node(const Node<K, V>&);
@@ -56,8 +57,9 @@ class Node {
 };
 
 template <typename K, typename V>
-Node<K, V>::Node(V value, Node<K, V>* previous, Node<K, V>* next)
-    : value{std::move(value)},
+Node<K, V>::Node(K key, V value, Node<K, V>* previous, Node<K, V>* next)
+    : key{std::move(key)},
+      value{std::move(value)},
       previous{std::move(previous)},
       next{std::move(next)} {}
 

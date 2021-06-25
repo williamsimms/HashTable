@@ -298,10 +298,6 @@ class LinkedList {
     return !((*this) == rhs);
   }
 
-  bool operator<(LinkedList<K, V>& otherList) const {
-    return this->Size() < otherList.Size();
-  }
-
   bool operator>(LinkedList<K, V>& otherList) const {
     return this->Size() > otherList.Size();
   }
@@ -353,8 +349,6 @@ class LinkedList {
 template <typename K, typename V>
 LinkedList<K, V>::LinkedList() noexcept
     : head{nullptr}, tail{nullptr}, length{0} {}
-
-
 
 template <typename K, typename V>
 LinkedList<K, V>::LinkedList(const LinkedList<K, V>& otherList) noexcept
@@ -414,7 +408,7 @@ ostream& operator<<(ostream& os, const LinkedList<K, V>& list) {
 template <typename K, typename V>
 void LinkedList<K, V>::PushFront(const K& key, const V& value) noexcept {
   if (!this->head && !this->tail) {
-    Node<K, V>* newNode = new Node<K, V>(value);
+    Node<K, V>* newNode = new Node<K, V>(key, value);
     this->head = newNode;
     this->tail = newNode;
     this->length++;
@@ -422,7 +416,7 @@ void LinkedList<K, V>::PushFront(const K& key, const V& value) noexcept {
   }
 
   Node<K, V>* currentHead = this->head;
-  Node<K, V>* newNode = new Node<K, V>(value, nullptr, currentHead);
+  Node<K, V>* newNode = new Node<K, V>(key, value, nullptr, currentHead);
   currentHead->previous = newNode;
   this->head = newNode;
   this->length++;
@@ -431,12 +425,12 @@ void LinkedList<K, V>::PushFront(const K& key, const V& value) noexcept {
 template <typename K, typename V>
 void LinkedList<K, V>::PushBack(const K& key, const V& value) {
   if (!this->head && !this->tail) {
-    this->PushFront(value);
+    this->PushFront(key, value);
     return;
   }
 
   Node<K, V>* currentTail = this->tail;
-  Node<K, V>* newNode = new Node<K, V>(value, currentTail, nullptr);
+  Node<K, V>* newNode = new Node<K, V>(key, value, currentTail, nullptr);
   currentTail->next = newNode;
   this->tail = newNode;
   this->length++;
@@ -445,14 +439,14 @@ void LinkedList<K, V>::PushBack(const K& key, const V& value) {
 template <typename K, typename V>
 void LinkedList<K, V>::PushBack(const K& key, V&& value) {
   if (!this->head && !this->tail) {
-    Node<K, V>* newNode = new Node<K, V>(move(value));
+    Node<K, V>* newNode = new Node<K, V>(key, move(value));
     this->head = newNode;
     this->tail = newNode;
     this->length++;
     return;
   }
 
-  Node<K, V>* newNode = new Node<K, V>(move(value), this->tail, nullptr);
+  Node<K, V>* newNode = new Node<K, V>(key, move(value), this->tail, nullptr);
   this->tail->next = newNode;
   this->tail = newNode;
   this->length++;
@@ -461,7 +455,7 @@ void LinkedList<K, V>::PushBack(const K& key, V&& value) {
 template <typename K, typename V>
 void LinkedList<K, V>::PushAt(const K& key, const V& value, int index) {
   if ((!this->head && !this->tail) || index <= 0) {
-    this->PushFront(value);
+    this->PushFront(key, value);
     return;
   }
 
@@ -475,7 +469,7 @@ void LinkedList<K, V>::PushAt(const K& key, const V& value, int index) {
   Node<K, V>* nodeToBeReplacedAtIndex = nodeAtPreviousIndex->next;
 
   Node<K, V>* newNode =
-      new Node<K, V>(value, nodeAtPreviousIndex, nodeToBeReplacedAtIndex);
+      new Node<K, V>(key, value, nodeAtPreviousIndex, nodeToBeReplacedAtIndex);
 
   nodeAtPreviousIndex->next = newNode;
   nodeToBeReplacedAtIndex->previous = newNode;
@@ -485,19 +479,18 @@ void LinkedList<K, V>::PushAt(const K& key, const V& value, int index) {
 template <typename K, typename V>
 void LinkedList<K, V>::PushMiddle(const K& key, const V& value) {
   if (!this->head && !this->tail) {
-    this->PushFront(value);
+    this->PushFront(key, value);
     return;
   }
 
   int midpointIndex = this->FindMidpointIndex();
-
-  this->PushAt(value, midpointIndex);
+  this->PushAt(key, value, midpointIndex);
 }
 
 template <typename K, typename V>
 void LinkedList<K, V>::PushFront(const K& key, V&& value) noexcept {
   if (!this->head && !this->tail) {
-    Node<K, V>* newNode = new Node<K, V>(move(value));
+    Node<K, V>* newNode = new Node<K, V>(key, move(value));
     this->head = newNode;
     this->tail = newNode;
     this->length++;
@@ -505,7 +498,7 @@ void LinkedList<K, V>::PushFront(const K& key, V&& value) noexcept {
   }
 
   Node<K, V>* currentHead = this->head;
-  Node<K, V>* newNode = new Node<K, V>(move(value), nullptr, currentHead);
+  Node<K, V>* newNode = new Node<K, V>(key, move(value), nullptr, currentHead);
   currentHead->previous = newNode;
   this->head = newNode;
   this->length++;
@@ -524,12 +517,9 @@ void LinkedList<K, V>::PushAt(const K& key, V&& value, int index) {
   }
 
   Node<K, V>* nodeAtPreviousIndex = this->At(index - 1);
-
   Node<K, V>* nodeToBeReplacedAtIndex = nodeAtPreviousIndex->next;
-
-  Node<K, V>* newNode =
-      new Node<K, V>(move(value), nodeAtPreviousIndex, nodeToBeReplacedAtIndex);
-
+  Node<K, V>* newNode = new Node<K, V>(key, move(value), nodeAtPreviousIndex,
+                                       nodeToBeReplacedAtIndex);
   nodeAtPreviousIndex->next = newNode;
   nodeToBeReplacedAtIndex->previous = newNode;
   this->length++;
@@ -806,14 +796,15 @@ template <typename K, typename V>
 template <typename... Args>
 void LinkedList<K, V>::EmplaceBack(const K& key, Args&&... args) {
   if (!this->head && !this->tail) {
-    Node<K, V>* newNode = new Node<K, V>(V(forward<Args>(args)...));
+    Node<K, V>* newNode = new Node<K, V>(key, V(forward<Args>(args)...));
     this->head = newNode;
     this->tail = newNode;
     this->length++;
     return;
   }
 
-  Node<K, V>* newNode = new Node<K, V>(V(forward<Args>(args)...), this->tail);
+  Node<K, V>* newNode =
+      new Node<K, V>(key, V(forward<Args>(args)...), this->tail);
   this->tail->next = newNode;
   this->tail = newNode;
   this->length++;
@@ -823,7 +814,7 @@ template <typename K, typename V>
 template <typename... Args>
 void LinkedList<K, V>::EmplaceFront(const K& key, Args&&... args) {
   if (!this->head && !this->tail) {
-    Node<K, V>* newNode = new Node<K, V>(V(forward<Args>(args)...));
+    Node<K, V>* newNode = new Node<K, V>(key, V(forward<Args>(args)...));
     this->head = newNode;
     this->tail = newNode;
     this->length++;
@@ -831,7 +822,7 @@ void LinkedList<K, V>::EmplaceFront(const K& key, Args&&... args) {
   }
 
   Node<K, V>* newNode =
-      new Node<K, V>(V(forward<Args>(args)...), nullptr, this->head);
+      new Node<K, V>(key, V(forward<Args>(args)...), nullptr, this->head);
   this->head->previous = newNode;
   this->head = newNode;
   this->length++;
@@ -842,7 +833,7 @@ template <typename... Args>
 void LinkedList<K, V>::EmplaceMiddle(const K& key, Args&&... args) {
   if (!this->head && !this->tail) {
     Node<K, V>* newNode =
-        new Node<K, V>(V(forward<Args>(args)...), nullptr, nullptr);
+        new Node<K, V>(key, V(forward<Args>(args)...), nullptr, nullptr);
     this->head = newNode;
     this->tail = newNode;
     this->length++;
@@ -852,7 +843,7 @@ void LinkedList<K, V>::EmplaceMiddle(const K& key, Args&&... args) {
   Node<K, V>* middleNode = this->FindMidpoint();
   Node<K, V>* nodePreviousToMiddle = middleNode->previous;
 
-  Node<K, V>* newNode = new Node<K, V>(V(forward<Args>(args)...),
+  Node<K, V>* newNode = new Node<K, V>(key, V(forward<Args>(args)...),
                                        nodePreviousToMiddle, middleNode);
   nodePreviousToMiddle->next = newNode;
   middleNode->previous = newNode;
@@ -864,7 +855,7 @@ template <typename... Args>
 void LinkedList<K, V>::EmplaceAt(int index, const K& key, Args&&... args) {
   if (!this->head && !this->tail) {
     Node<K, V>* newNode =
-        new Node<K, V>(V(forward<Args>(args)...), nullptr, nullptr);
+        new Node<K, V>(key, V(forward<Args>(args)...), nullptr, nullptr);
     this->head = newNode;
     this->tail = newNode;
     this->length++;
@@ -881,8 +872,9 @@ void LinkedList<K, V>::EmplaceAt(int index, const K& key, Args&&... args) {
 
   Node<K, V>* nodeAtPreviousIndex = this->At(index - 1);
   Node<K, V>* nodeToBeReplacedAtIndex = nodeAtPreviousIndex->next;
-  Node<K, V>* newNode = new Node<K, V>(
-      V(forward<Args>(args)...), nodeAtPreviousIndex, nodeToBeReplacedAtIndex);
+  Node<K, V>* newNode =
+      new Node<K, V>(key, V(forward<Args>(args)...), nodeAtPreviousIndex,
+                     nodeToBeReplacedAtIndex);
 
   nodeAtPreviousIndex->next = newNode;
   nodeToBeReplacedAtIndex->previous = newNode;
