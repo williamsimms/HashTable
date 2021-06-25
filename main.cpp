@@ -9,11 +9,12 @@
 using namespace std;
 
 int main() {
-  HashTable<string, int> ht;
-
   unordered_map<string, int> ma(100);
 
-  cout << ma.bucket_count() << endl;
+  HashTable<string, int> ht;
+  ht.Insert("Hello", 4);
+
+  cout << ht.LoadFactor() << endl;
 
   return 0;
 }

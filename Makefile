@@ -11,6 +11,15 @@ run:
 test:
 	make test-table
 
+test-table:
+	make test-table
+
+test-list:
+	clang++ $(CXXFLAGS) -o linkedlisttest test/linkedlist.test.cpp && ./linkedlisttest && rm -f linkedlisttest
+
+test-node:
+	clang++ $(CXXFLAGS) -o nodetest test/node.test.cpp && ./nodetest && rm -f nodetest
+
 clean:
 	rm -f a.exe main main.pdb main.ilk linkedlisttest nodetest
 
