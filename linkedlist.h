@@ -198,6 +198,11 @@ class LinkedList {
   [[nodiscard]] bool Empty() const noexcept;
   [[nodiscard]] bool Contains(const V& value) const noexcept;
 
+  [[nodiscard]] int IndexOf(const V& data) const;
+  [[nodiscard]] int LastIndexOf(const V& data) const;
+  Node<K, V>* Find(const V& data) const;
+  Node<K, V>* Find(const K& data) const;
+
   void PopFront();
   void PopBack();
   void PopAt(int index);
@@ -879,6 +884,86 @@ void LinkedList<K, V>::EmplaceAt(int index, const K& key, Args&&... args) {
   nodeAtPreviousIndex->next = newNode;
   nodeToBeReplacedAtIndex->previous = newNode;
   this->length++;
+}
+
+template <typename K, typename V>
+int LinkedList<K, V>::IndexOf(const V& data) const {
+  if (!this->head && !this->tail) {
+    return -1;
+  }
+
+  Node<K, V>* node = this->head;
+  int counter = 0;
+
+  while (node) {
+    if (node->value == data) {
+      return counter;
+    }
+
+    node = node->next;
+    counter++;
+  }
+
+  return -1;
+}
+
+template <typename K, typename V>
+int LinkedList<K, V>::LastIndexOf(const V& data) const {
+  if (!this->head && !this->tail) {
+    return -1;
+  }
+
+  Node<K, V>* node = this->head;
+  int counter = 0;
+  int indexOfNode = -1;
+
+  while (node) {
+    if (node->value == data) {
+      indexOfNode = counter;
+    }
+
+    node = node->next;
+    counter++;
+  }
+
+  return indexOfNode;
+}
+
+template <typename K, typename V>
+Node<K, V>* LinkedList<K, V>::Find(const V& data) const {
+  if (!this->head && !this->tail) {
+    return nullptr;
+  }
+
+  Node<T>* node = this->head;
+  while (node) {
+    if (node->value == data) {
+      return node;
+    }
+
+    node = node->next;
+  }
+
+  return nullptr;
+}
+
+template <typename K, typename V>
+Node<K, V>* LinkedList<K, V>::Find(const K& key) const {
+  if (!this->head && !this->tail) {
+    return nullptr;
+  }
+
+  Node<T>* node = this->head;
+
+  while (node) {
+    if (node->key == key) {
+      return node;
+    }
+
+    node = node->next;
+  }
+
+  return nullptr;
 }
 
 #endif

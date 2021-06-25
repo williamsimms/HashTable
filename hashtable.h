@@ -136,13 +136,14 @@ void HashTable<K, V, H>::Insert(const K& key, const V& value) {
 
   unsigned long long int hashedKey = Hash(key);
   LinkedList<K, V>& bucket = table[hashedKey];
-  bucket.PushBack(value);
+  bucket.PushBack(key, value);
   this->size++;
 }
 
 template <typename K, typename V, typename H>
 V& HashTable<K, V, H>::At(const K& key) {
   unsigned long long int hashedKey = Hash(key);
+  LinkedList<K, V> bucket = table[hashedKey];
 }
 
 template <typename K, typename V, typename H>
@@ -162,9 +163,7 @@ void HashTable<K, V, H>::Resize() {
 
 template <typename K, typename V, typename H>
 template <typename... Args>
-void HashTable<K, V, H>::Emplace(Args&&... args) {
-  //
-}
+void HashTable<K, V, H>::Emplace(Args&&... args) {}
 
 template <typename K, typename V, typename H>
 int HashTable<K, V, H>::BucketSize(const K& key) const {
