@@ -218,8 +218,6 @@ class LinkedList {
 
   void Clear();
 
-  int Unique();
-
   void Resize(int size);
   void Resize(int size, const V& dataToUse);
 
@@ -611,14 +609,14 @@ void LinkedList<K, V>::PushAt(V&& data, int index) {
 
 template <typename K, typename V>
 void LinkedList<K, V>::InsertManyAtStart(const initializer_list<V>& data) {
-  for (const T& element : data) {
+  for (const V& element : data) {
     this->PushFront(element);
   }
 }
 
 template <typename K, typename V>
 void LinkedList<K, V>::InsertManyAtEnd(const initializer_list<V>& data) {
-  for (const T& element : data) {
+  for (const V& element : data) {
     this->PushBack(element);
   }
 }
@@ -756,7 +754,7 @@ void LinkedList<K, V>::PopAt(int index) {
   }
 
   if (index == this->length - 1) {
-    this->RemoveLast();
+    this->PopBack();
     return;
   }
 
@@ -898,7 +896,7 @@ void LinkedList<K, V>::Resize(int size) {
     int counter = this->length;
 
     while (counter > size) {
-      this->RemoveLast();
+      this->PopBack();
       counter = this->length;
     }
   }
@@ -930,7 +928,7 @@ void LinkedList<K, V>::Resize(int size, const V& dataToUse) {
     int counter = this->length;
 
     while (counter > size) {
-      this->RemoveLast();
+      this->PopBack();
       counter = this->length;
     }
   }

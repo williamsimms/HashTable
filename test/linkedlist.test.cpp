@@ -268,18 +268,6 @@ TEST_CASE("Empties the Linked List", "[Clear]") {
   REQUIRE(list.Size() == 0);
 }
 
-TEST_CASE("Empty Works as an alias for Clear", "[Empty]") {
-  LinkedList<int, int> list;
-
-  list.InsertManyAtStart({1, 2, 3, 4, 5, 6});
-
-  REQUIRE(list.Size() == 6);
-
-  list.Empty();
-
-  REQUIRE(list.Size() == 0);
-}
-
 TEST_CASE("Removes the Head Node", "[Remove Head]") {
   SECTION("Removes the Head Node when the List has a size of one") {
     LinkedList<int, int> list;
@@ -759,50 +747,6 @@ TEST_CASE("Returns the amount of times the data occurs within the list",
     REQUIRE(countSix == 5);
     REQUIRE(countEleven == 3);
     REQUIRE(countTwentyTwo == 2);
-  }
-}
-
-TEST_CASE("Removes all Duplicates from the list", "[Unique]") {
-  SECTION("Returns zero if the list is empty.") {
-    LinkedList<int, int> list;
-    int count = list.Unique();
-    REQUIRE(count == 0);
-  }
-
-  SECTION(
-      "Returns the number of elements removes and removes all nodes with "
-      "duplicate data.") {
-    LinkedList<int, int> list;
-
-    list.InsertManyAtStart({5, 5, 5, 5, 3, 6, 6, 6, 11, 11, 22});
-
-    int countFive = list.Count(5);
-    int countThree = list.Count(3);
-    int countSix = list.Count(6);
-    int countEleven = list.Count(11);
-    int countTwentyTwo = list.Count(22);
-
-    REQUIRE(countFive == 4);
-    REQUIRE(countThree == 1);
-    REQUIRE(countSix == 3);
-    REQUIRE(countEleven == 2);
-    REQUIRE(countTwentyTwo == 1);
-
-    int numRemoved = list.Unique();
-
-    countFive = list.Count(5);
-    countThree = list.Count(3);
-    countSix = list.Count(6);
-    countEleven = list.Count(11);
-    countTwentyTwo = list.Count(22);
-
-    REQUIRE(numRemoved == 6);
-
-    REQUIRE(countFive == 1);
-    REQUIRE(countThree == 1);
-    REQUIRE(countSix == 1);
-    REQUIRE(countEleven == 1);
-    REQUIRE(countTwentyTwo == 1);
   }
 }
 
