@@ -850,7 +850,13 @@ TEST_CASE("Iterator Works with the Linked List.", "[Iterator]") {
   SECTION("begin can be used to get hold of the first element.") {
     LinkedList<int, int> list;
 
-    list.InsertManyAtStart({1, 5, 1, 3, 5, 6});
+    list.PushFront(12, 1);
+    list.PushFront(12, 5);
+    list.PushFront(12, 1);
+    list.PushFront(12, 3);
+    list.PushFront(12, 5);
+    list.PushFront(12, 6);
+
     LinkedList<int, int>::Iterator begin = list.begin();
 
     REQUIRE(begin->value == 6);
@@ -858,7 +864,15 @@ TEST_CASE("Iterator Works with the Linked List.", "[Iterator]") {
 
   SECTION("A Range based for loop can be used on the linked list.") {
     LinkedList<int, int> list;
-    list.InsertManyAtEnd({1, 2, 3, 4, 5, 6, 7});
+
+    list.PushBack(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
+    list.PushBack(12, 4);
+    list.PushBack(12, 5);
+    list.PushBack(12, 6);
+    list.PushBack(12, 7);
+
     for (Node<int, int> node : list) {
       ;
     }
@@ -866,7 +880,14 @@ TEST_CASE("Iterator Works with the Linked List.", "[Iterator]") {
 
   SECTION("A For loop with iterators is possible.") {
     LinkedList<int, int> list;
-    list.InsertManyAtEnd({1, 2, 3, 4, 5, 6, 7});
+
+    list.PushBack(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
+    list.PushBack(12, 4);
+    list.PushBack(12, 5);
+    list.PushBack(12, 6);
+    list.PushBack(12, 7);
 
     for (LinkedList<int, int>::Iterator it = list.begin(); it != list.end();
          it++) {
@@ -876,7 +897,14 @@ TEST_CASE("Iterator Works with the Linked List.", "[Iterator]") {
 
   SECTION("A For loop with const iterators is possible.") {
     LinkedList<int, int> list;
-    list.InsertManyAtEnd({1, 2, 3, 4, 5, 6, 7});
+
+    list.PushBack(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
+    list.PushBack(12, 4);
+    list.PushBack(12, 5);
+    list.PushBack(12, 6);
+    list.PushBack(12, 7);
 
     for (LinkedList<int, int>::ConstIterator it = list.cbegin();
          it != list.cend(); it++) {
@@ -886,7 +914,14 @@ TEST_CASE("Iterator Works with the Linked List.", "[Iterator]") {
 
   SECTION("A Reverse For loop with iterators is possible.") {
     LinkedList<int, int> list;
-    list.InsertManyAtEnd({1, 2, 3, 4, 5, 6, 7});
+
+    list.PushBack(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
+    list.PushBack(12, 4);
+    list.PushBack(12, 5);
+    list.PushBack(12, 6);
+    list.PushBack(12, 7);
 
     for (LinkedList<int, int>::ReverseIterator it = list.rbegin();
          it != list.rend(); it++) {
@@ -896,7 +931,14 @@ TEST_CASE("Iterator Works with the Linked List.", "[Iterator]") {
 
   SECTION("A Reverse For loop with iterators is possible.") {
     LinkedList<int, int> list;
-    list.InsertManyAtEnd({1, 2, 3, 4, 5, 6, 7});
+
+    list.PushBack(12, 1);
+    list.PushBack(12, 2);
+    list.PushBack(12, 3);
+    list.PushBack(12, 4);
+    list.PushBack(12, 5);
+    list.PushBack(12, 6);
+    list.PushBack(12, 7);
 
     for (LinkedList<int, int>::ConstReverseIterator it = list.crbegin();
          it != list.crend(); it++) {
@@ -919,7 +961,13 @@ TEST_CASE("Returns the element at the head position,nullptr otherwise.",
 
     REQUIRE(list.Head()->value == 4);
 
-    list.InsertManyAtStart({1, 2, 3, 4, 5});
+    list.PushFront(12, 1);
+    list.PushFront(12, 2);
+    list.PushFront(12, 3);
+    list.PushFront(12, 4);
+    list.PushFront(12, 5);
+    list.PushFront(12, 6);
+    list.PushFront(12, 7);
 
     REQUIRE(list.Head()->value == 5);
   }
