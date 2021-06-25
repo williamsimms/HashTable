@@ -5,16 +5,16 @@
 
 TEST_CASE("Node Data Property Functions Correcty", "[Node]") {
   Node<int, int> nodeOne(5, nullptr, nullptr);
-  REQUIRE(nodeOne.data == 5);
+  REQUIRE(nodeOne.value == 5);
 
   Node<int, int> nodeTwo(12);
-  REQUIRE(nodeTwo.data == 12);
+  REQUIRE(nodeTwo.value == 12);
 
   Node<int, int>* nodeThree = new Node<int, int>(14, nullptr, nullptr);
-  REQUIRE(nodeThree->data == 14);
+  REQUIRE(nodeThree->value == 14);
 
   Node<int, int>* nodeFour = new Node<int, int>(28, nodeThree, nullptr);
-  REQUIRE(nodeFour->data == 28);
+  REQUIRE(nodeFour->value == 28);
 
   delete nodeThree;
   delete nodeFour;

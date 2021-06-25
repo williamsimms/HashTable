@@ -50,7 +50,7 @@ class HashTable {
   void Erase(const K&);
 
   template <typename... Args>
-  void Emplace();
+  void Emplace(Args&&...);
 
   V& At(const K&);
   const V& At(const K&) const;
@@ -74,11 +74,8 @@ class HashTable {
 
   [[nodiscard]] unsigned long long int Hash(const K&);
 
-  // average number of elements per bucket
-  // total number of items / size of the array
   float LoadFactor() const;
 
-  // manages maximum average number of elements per bucket
   int MaxLoadFactor();
 
   // begin()
@@ -92,11 +89,12 @@ class HashTable {
 };
 
 template <typename K, typename V, typename H>
-HashTable<K, V, H>::HashTable() : buckets(8), table(new LinkedList<K, V>[8]) {}
+HashTable<K, V, H>::HashTable()
+    : size(0), buckets(8), table(new LinkedList<K, V>[8]) {}
 
 template <typename K, typename V, typename H>
 HashTable<K, V, H>::HashTable(int bucketCount)
-    : buckets(RoundUp(bucketCount, 8)) {
+    : size(0), buckets(RoundUp(bucketCount, 8)) {
   table = new LinkedList<K, V>[buckets]
 }
 
@@ -110,7 +108,7 @@ HashTable<K, V, H>::~HashTable() {
 template <typename K, typename V, typename H>
 unsigned long long int HashTable<K, V, H>::Hash(const K& key) {
   unsigned long long int hash = H()(key);
-  return hash % size;
+  return hash % buckets;
 }
 
 template <typename K, typename V, typename H>
@@ -127,17 +125,17 @@ template <typename K, typename V, typename H>
 bool HashTable<K, V, H>::Key(const K& keyOne, const K& keyTwo) {
   unsigned long long int hashOne = Hash(keyOne);
   unsigned long long int hashTwo = Hash(keyTwo);
-  return hashOne == = hashTwo;
+  return hashOne == hashTwo;
 }
 
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Insert(const K& key, const V& value) {
-  // if (LoadFactor()) {
-
-  // }
+  if (LoadFactor() >= 1) {
+    Resize();
+  }
 
   unsigned long long int hashedKey = Hash(key);
-  LinkedList<K, V> bucket = table[hashedKey];
+  LinkedList<K, V>& bucket = table[hashedKey];
   bucket.PushBack(value);
   this->size++;
 }
@@ -145,6 +143,34 @@ void HashTable<K, V, H>::Insert(const K& key, const V& value) {
 template <typename K, typename V, typename H>
 V& HashTable<K, V, H>::At(const K& key) {
   unsigned long long int hashedKey = Hash(key);
+}
+
+template <typename K, typename V, typename H>
+int HashTable<K, V, H>::Size() const {
+  return size;
+}
+
+template <typename K, typename V, typename H>
+void HashTable<K, V, H>::Reserve(int count) {
+  //
+}
+
+template <typename K, typename V, typename H>
+void HashTable<K, V, H>::Resize() {
+  //
+}
+
+template <typename K, typename V, typename H>
+template <typename... Args>
+void HashTable<K, V, H>::Emplace(Args&&... args) {
+  //
+}
+
+template <typename K, typename V, typename H>
+int HashTable<K, V, H>::BucketSize(const K& key) const {
+  unsigned long long int hashedKey = Hash(key);
+  LinkedList<K, V> bucket = table[hashedKey];
+  return bucket.Size();
 }
 
 #endif

@@ -2,6 +2,7 @@ CC=clang
 CXX=clang++
 CXXFLAGS=-std=c++20 -Wall -Wpedantic -Wextra
 
+
 build:
 	clang++ $(CXXFLAGS) main.cpp 
 
@@ -12,7 +13,7 @@ test:
 	make test-table
 
 test-table:
-	make test-table
+	clang++ $(CXXFLAGS) -o linkedlisttest test/hashtable.test.cpp && ./hashtabletest && rm -f hashtabletest
 
 test-list:
 	clang++ $(CXXFLAGS) -o linkedlisttest test/linkedlist.test.cpp && ./linkedlisttest && rm -f linkedlisttest

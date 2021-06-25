@@ -166,35 +166,31 @@ class LinkedList {
   LinkedList(int size) noexcept;
   LinkedList(int size, const V& data) noexcept;
   LinkedList(const initializer_list<V>&) noexcept;
-  LinkedList(const vector<V>&) noexcept;
   LinkedList(const LinkedList<K, V>&) noexcept;
   LinkedList(LinkedList<K, V>&&) noexcept;
   ~LinkedList() noexcept;
 
-  void PushFront(const V& data) noexcept;
-  void PushBack(const V& data);
-  void PushAt(const V& data, int index);
-  void PushMiddle(const V& data);
+  void PushFront(const K&, const V& data) noexcept;
+  void PushBack(const K&, const V& data);
+  void PushAt(const K&, const V& data, int index);
+  void PushMiddle(const K&, const V& data);
 
-  void PushFront(V&& data) noexcept;
-  void PushBack(V&& data);
-  void PushAt(V&& data, int index);
-  void PushMiddle(V&& data);
-
-  void InsertManyAtStart(const initializer_list<V>& data);
-  void InsertManyAtEnd(const initializer_list<V>& data);
+  void PushFront(const K&, V&& data) noexcept;
+  void PushBack(const K&, V&& data);
+  void PushAt(const K&, V&& data, int index);
+  void PushMiddle(const K&, V&& data);
 
   template <typename... Args>
-  void EmplaceFront(Args&&... args);
+  void EmplaceFront(const K&, Args&&... args);
 
   template <typename... Args>
-  void EmplaceMiddle(Args&&... args);
+  void EmplaceMiddle(const K&, Args&&... args);
 
   template <typename... Args>
-  void EmplaceBack(Args&&... args);
+  void EmplaceBack(const K&, Args&&... args);
 
   template <typename... Args>
-  void EmplaceAt(int index, Args&&... args);
+  void EmplaceAt(int index, const K&, Args&&... args);
 
   void Print() const noexcept;
   [[nodiscard]] int Length() const noexcept;
@@ -423,12 +419,6 @@ LinkedList<K, V>::LinkedList(const initializer_list<V>& list) noexcept
 }
 
 template <typename K, typename V>
-LinkedList<K, V>::LinkedList(const vector<V>& vector) noexcept
-    : head{nullptr}, tail{nullptr}, length{0} {
-  this->Assign(vector);
-}
-
-template <typename K, typename V>
 LinkedList<K, V>::LinkedList(const LinkedList<K, V>& otherList) noexcept
     : head{nullptr}, tail{nullptr}, length{0} {
   if (&otherList == this) {
@@ -484,7 +474,7 @@ ostream& operator<<(ostream& os, const LinkedList<K, V>& list) {
 }
 
 template <typename K, typename V>
-void LinkedList<K, V>::PushFront(const V& data) noexcept {
+void LinkedList<K, V>::PushFront(const K& key, const V& data) noexcept {
   if (!this->head && !this->tail) {
     Node<K, V>* newNode = new Node<K, V>(data);
     this->head = newNode;
@@ -501,7 +491,7 @@ void LinkedList<K, V>::PushFront(const V& data) noexcept {
 }
 
 template <typename K, typename V>
-void LinkedList<K, V>::PushBack(const V& data) {
+void LinkedList<K, V>::PushBack(const K& key, const V& data) {
   if (!this->head && !this->tail) {
     this->PushFront(data);
     return;
@@ -515,7 +505,7 @@ void LinkedList<K, V>::PushBack(const V& data) {
 }
 
 template <typename K, typename V>
-void LinkedList<K, V>::PushBack(V&& data) {
+void LinkedList<K, V>::PushBack(const K& key, V&& data) {
   if (!this->head && !this->tail) {
     Node<K, V>* newNode = new Node<K, V>(move(data));
     this->head = newNode;
@@ -531,7 +521,7 @@ void LinkedList<K, V>::PushBack(V&& data) {
 }
 
 template <typename K, typename V>
-void LinkedList<K, V>::PushAt(const V& data, int index) {
+void LinkedList<K, V>::PushAt(const K& key, const V& data, int index) {
   if ((!this->head && !this->tail) || index <= 0) {
     this->PushFront(data);
     return;
@@ -555,7 +545,7 @@ void LinkedList<K, V>::PushAt(const V& data, int index) {
 }
 
 template <typename K, typename V>
-void LinkedList<K, V>::PushMiddle(const V& data) {
+void LinkedList<K, V>::PushMiddle(const K& key, const V& data) {
   if (!this->head && !this->tail) {
     this->PushFront(data);
     return;
@@ -567,7 +557,7 @@ void LinkedList<K, V>::PushMiddle(const V& data) {
 }
 
 template <typename K, typename V>
-void LinkedList<K, V>::PushFront(V&& data) noexcept {
+void LinkedList<K, V>::PushFront(const K& key, V&& data) noexcept {
   if (!this->head && !this->tail) {
     Node<K, V>* newNode = new Node<K, V>(move(data));
     this->head = newNode;
@@ -584,7 +574,7 @@ void LinkedList<K, V>::PushFront(V&& data) noexcept {
 }
 
 template <typename K, typename V>
-void LinkedList<K, V>::PushAt(V&& data, int index) {
+void LinkedList<K, V>::PushAt(const K& key, V&& data, int index) {
   if ((!this->head && !this->tail) || index <= 0) {
     this->PushFront(move(data));
     return;
@@ -605,20 +595,6 @@ void LinkedList<K, V>::PushAt(V&& data, int index) {
   nodeAtPreviousIndex->next = newNode;
   nodeToBeReplacedAtIndex->previous = newNode;
   this->length++;
-}
-
-template <typename K, typename V>
-void LinkedList<K, V>::InsertManyAtStart(const initializer_list<V>& data) {
-  for (const V& element : data) {
-    this->PushFront(element);
-  }
-}
-
-template <typename K, typename V>
-void LinkedList<K, V>::InsertManyAtEnd(const initializer_list<V>& data) {
-  for (const V& element : data) {
-    this->PushBack(element);
-  }
 }
 
 template <typename K, typename V>
@@ -1027,7 +1003,7 @@ Node<K, V>* LinkedList<K, V>::Tail() {
 
 template <typename K, typename V>
 template <typename... Args>
-void LinkedList<K, V>::EmplaceBack(Args&&... args) {
+void LinkedList<K, V>::EmplaceBack(const K& key, Args&&... args) {
   if (!this->head && !this->tail) {
     Node<K, V>* newNode = new Node<K, V>(V(forward<Args>(args)...));
     this->head = newNode;
@@ -1044,7 +1020,7 @@ void LinkedList<K, V>::EmplaceBack(Args&&... args) {
 
 template <typename K, typename V>
 template <typename... Args>
-void LinkedList<K, V>::EmplaceFront(Args&&... args) {
+void LinkedList<K, V>::EmplaceFront(const K& key, Args&&... args) {
   if (!this->head && !this->tail) {
     Node<K, V>* newNode = new Node<K, V>(V(forward<Args>(args)...));
     this->head = newNode;
@@ -1062,7 +1038,7 @@ void LinkedList<K, V>::EmplaceFront(Args&&... args) {
 
 template <typename K, typename V>
 template <typename... Args>
-void LinkedList<K, V>::EmplaceMiddle(Args&&... args) {
+void LinkedList<K, V>::EmplaceMiddle(const K& key, Args&&... args) {
   if (!this->head && !this->tail) {
     Node<K, V>* newNode =
         new Node<K, V>(V(forward<Args>(args)...), nullptr, nullptr);
@@ -1084,7 +1060,7 @@ void LinkedList<K, V>::EmplaceMiddle(Args&&... args) {
 
 template <typename K, typename V>
 template <typename... Args>
-void LinkedList<K, V>::EmplaceAt(int index, Args&&... args) {
+void LinkedList<K, V>::EmplaceAt(int index, const K& key, Args&&... args) {
   if (!this->head && !this->tail) {
     Node<K, V>* newNode =
         new Node<K, V>(V(forward<Args>(args)...), nullptr, nullptr);

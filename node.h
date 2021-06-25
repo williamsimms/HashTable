@@ -10,24 +10,25 @@ class Node {
   friend std::ostream& operator<<(std::ostream& os, const Node<W, X>& node);
 
  public:
-  V data;
+  K key;
+  V value;
   Node<K, V>* previous;
   Node<K, V>* next;
 
-  explicit Node(V data,
+  explicit Node(V value,
                 Node<K, V>* previous = nullptr,
                 Node<K, V>* next = nullptr);
   Node(const Node<K, V>&);
   Node(Node<K, V>&&);
   ~Node();
   V Data() const;
-  void SetData(V data);
+  void SetData(V value);
   void SetNext(Node<K, V>* next);
   void Print();
   void SetPrevious(Node<K, V>* previous);
 
   bool operator==(const Node& rhs) const {
-    if (this->data == rhs.data) {
+    if (this->value == rhs.value) {
       return true;
     }
 
@@ -35,7 +36,7 @@ class Node {
   }
 
   bool operator>(const Node& rhs) const {
-    if (this->data > rhs.data) {
+    if (this->value > rhs.value) {
       return true;
     }
 
@@ -43,7 +44,7 @@ class Node {
   }
 
   bool operator<(const Node& rhs) const {
-    if (this->data < rhs.data) {
+    if (this->value < rhs.value) {
       return true;
     }
 
@@ -55,8 +56,8 @@ class Node {
 };
 
 template <typename K, typename V>
-Node<K, V>::Node(V data, Node<K, V>* previous, Node<K, V>* next)
-    : data{std::move(data)},
+Node<K, V>::Node(V value, Node<K, V>* previous, Node<K, V>* next)
+    : value{std::move(value)},
       previous{std::move(previous)},
       next{std::move(next)} {}
 
@@ -71,7 +72,7 @@ Node<K, V>::Node(Node<K, V>&&) = default;
 
 template <typename K, typename V>
 V Node<K, V>::Data() const {
-  return this->data;
+  return this->value;
 }
 
 template <typename K, typename V>
@@ -92,12 +93,12 @@ void Node<K, V>::SetNext(Node<K, V>* nextNode) {
 
 template <typename K, typename V>
 void Node<K, V>::SetData(V newData) {
-  this->data = newData;
+  this->value = newData;
 }
 
 template <typename K, typename V>
 void Node<K, V>::Print() {
-  std::cout << this->data << std::endl;
+  std::cout << this->value << std::endl;
 }
 
 template <typename K, typename V>
