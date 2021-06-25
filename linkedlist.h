@@ -163,9 +163,6 @@ class LinkedList {
 
  public:
   LinkedList() noexcept;
-  LinkedList(int size) noexcept;
-  LinkedList(int size, const V& value) noexcept;
-  LinkedList(const initializer_list<V>&) noexcept;
   LinkedList(const LinkedList<K, V>&) noexcept;
   LinkedList(LinkedList<K, V>&&) noexcept;
   ~LinkedList() noexcept;
@@ -301,44 +298,6 @@ class LinkedList {
     return !((*this) == rhs);
   }
 
-  void operator++() {
-    int currentLength = this->length;
-    this->Resize(currentLength + 1);
-  }
-
-  void operator++(int) {
-    int currentLength = this->length;
-    this->Resize(currentLength + 1);
-  }
-
-  void operator--() {
-    if (this->length == 0) {
-      return;
-    }
-
-    int currentLength = this->length;
-    this->Resize(currentLength - 1);
-  }
-
-  void operator--(int) {
-    if (this->length == 0) {
-      return;
-    }
-
-    int currentLength = this->length;
-    this->Resize(currentLength - 1);
-  }
-
-  void operator+=(size_t size) {
-    int currentLength = this->length;
-    this->Resize(currentLength + size);
-  }
-
-  void operator-=(size_t size) {
-    int currentLength = this->length;
-    this->Resize(currentLength - size);
-  }
-
   bool operator<(LinkedList<K, V>& otherList) const {
     return this->Size() < otherList.Size();
   }
@@ -395,23 +354,7 @@ template <typename K, typename V>
 LinkedList<K, V>::LinkedList() noexcept
     : head{nullptr}, tail{nullptr}, length{0} {}
 
-template <typename K, typename V>
-LinkedList<K, V>::LinkedList(int size) noexcept
-    : head{nullptr}, tail{nullptr}, length{0} {
-  this->Resize(size);
-}
 
-template <typename K, typename V>
-LinkedList<K, V>::LinkedList(int size, const V& value) noexcept
-    : head{nullptr}, tail{nullptr}, length{0} {
-  this->Resize(size, value);
-}
-
-template <typename K, typename V>
-LinkedList<K, V>::LinkedList(const initializer_list<V>& list) noexcept
-    : head{nullptr}, tail{nullptr}, length{0} {
-  this->InsertManyAtEnd(list);
-}
 
 template <typename K, typename V>
 LinkedList<K, V>::LinkedList(const LinkedList<K, V>& otherList) noexcept
