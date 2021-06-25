@@ -15,7 +15,9 @@ class HashTable {
  public:
   using KeyValueType = K;
   using KeyPointerValueType = K*;
+  using ConstKeyPointerValueType = const K*;
   using KeyReferenceValueType = K&;
+  using ConstKeyReferenceValueType = const K&;
   using ValueType = V;
   using ValuePointerType = V*;
   using ConstValuePointerType = const V*;
