@@ -6,7 +6,7 @@
 
 using std::move;
 
-template <typename T>
+template <typename K, typename V>
 class Node {
   template <typename U>
   friend std::ostream& operator<<(std::ostream& os, const Node<U>& node);
@@ -25,8 +25,6 @@ class Node {
   void SetNext(Node<T>* next);
   void Print();
   void SetPrevious(Node<T>* previous);
-  void StepForward(int amountToStepForward);
-  void StepBackward(int amountToStepForward);
 
   bool operator==(const Node& rhs) const {
     if (this->data == rhs.data) {
@@ -93,26 +91,6 @@ void Node<T>::SetNext(Node<T>* nextNode) {
 template <typename T>
 void Node<T>::SetData(T newData) {
   this->data = newData;
-}
-
-template <typename T>
-void Node<T>::StepForward(int amountToStepForward) {
-  int counter = 0;
-
-  while (counter < amountToStepForward && this->next != nullptr) {
-    *this = *next;
-    counter++;
-  }
-}
-
-template <typename T>
-void Node<T>::StepBackward(int amountToStepForward) {
-  int counter = 0;
-
-  while (counter < amountToStepForward && this->previous != nullptr) {
-    *this = *previous;
-    counter++;
-  }
 }
 
 template <typename T>

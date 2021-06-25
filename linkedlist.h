@@ -134,16 +134,16 @@ class LinkedListReverseIterator {
   }
 };
 
-template <typename T>
+template <typename K, typename V>
 class LinkedList {
  public:
-  using ValueType = T;
-  using PointerType = T*;
-  using ReferenceType = T&;
-  using Iterator = LinkedListIterator<LinkedList<T>>;
-  using ConstIterator = LinkedListIterator<const LinkedList<T>>;
-  using ReverseIterator = LinkedListReverseIterator<LinkedList<T>>;
-  using ConstReverseIterator = LinkedListReverseIterator<const LinkedList<T>>;
+  using ValueType = V;
+  using PointerType = V*;
+  using ReferenceType = V&;
+  using Iterator = LinkedListIterator<LinkedList<V>>;
+  using ConstIterator = LinkedListIterator<const LinkedList<V>>;
+  using ReverseIterator = LinkedListReverseIterator<LinkedList<V>>;
+  using ConstReverseIterator = LinkedListReverseIterator<const LinkedList<V>>;
 
  private:
   Node<T>* head;

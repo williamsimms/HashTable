@@ -8,6 +8,7 @@
 #include <utility>
 #include <vector>
 
+#include "linkedlist.h"
 #include "utility/util.hpp"
 
 template <typename K, typename V, typename H = std::hash<K>>
@@ -57,7 +58,7 @@ class HashTable {
   int BucketCount() const;
   int MaxBucketCount() const;
   int BucketSize(const K&) const;
-  // const LinkedList<K,V>& Bucket(const K&) const;
+  const LinkedList<V>& Bucket(const K&) const;
 
   void Reserve();
 
@@ -70,6 +71,7 @@ class HashTable {
   [[nodiscard]] unsigned long long int Hash(const K&);
 
   // average number of elements per bucket
+  // total number of items / size of the array
   int LoadFactor();
 
   // manages maximum average number of elements per bucket
@@ -86,25 +88,33 @@ class HashTable {
 };
 
 template <typename K, typename V, typename H>
-HashTable<K, V, H>::HashTable() : buckets(20) {}
+HashTable<K, V, H>::HashTable() : buckets(8) {}
 
 template <typename K, typename V, typename H>
-HashTable<K, V, H>::HashTable(int bucketCount) : buckets(bucketCount) {}
+HashTable<K, V, H>::HashTable(int bucketCount)
+    : buckets(RoundUp(bucketCount, 8)) {}
 
 template <typename K, typename V, typename H>
 HashTable<K, V, H>::~HashTable() {
-  buckets = 8;
+  buckets = 0;
 }
 
 template <typename K, typename V, typename H>
 unsigned long long int HashTable<K, V, H>::Hash(const K& key) {
-  auto hash = H()(key);
+  unsigned long long int hash = H()(key);
   return hash % size;
 }
 
 template <typename K, typename V, typename H>
 int HashTable<K, V, H>::BucketCount() const {
   return this->buckets;
+}
+
+template <typename K, typename V, typename H>
+bool HashTable<K, V, H>::Key(const K& keyOne, const K& keyTwo) {
+  unsigned long long int hashOne = Hash(keyOne);
+  unsigned long long int hashTwo = Hash(keyTwo);
+  return hashOne == = hashTwo;
 }
 
 #endif
