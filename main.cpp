@@ -11,7 +11,9 @@ using namespace std;
 int main() {
   HashTable<string, int> ht;
 
-  unordered_map<string, int> ma;
+  unordered_map<string, int> ma(100);
+
+  cout << ma.bucket_count() << endl;
 
   return 0;
 }

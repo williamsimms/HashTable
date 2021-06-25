@@ -8,6 +8,8 @@
 #include <utility>
 #include <vector>
 
+#include "utility/util.hpp"
+
 template <typename K, typename V, typename H = std::hash<K>>
 class HashTable {
  public:
@@ -89,13 +91,18 @@ HashTable<K, V, H>::HashTable(int bucketCount) : buckets(bucketCount) {}
 
 template <typename K, typename V, typename H>
 HashTable<K, V, H>::~HashTable() {
-  buckets = 0;
+  buckets = 8;
 }
 
 template <typename K, typename V, typename H>
 unsigned long long int HashTable<K, V, H>::Hash(const K& key) {
   auto hash = H()(key);
   return hash % size;
+}
+
+template <typename K, typename V, typename H>
+int HashTable<K, V, H>::BucketCount() const {
+  return this->buckets;
 }
 
 #endif
