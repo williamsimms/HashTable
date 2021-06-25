@@ -1,4 +1,6 @@
+#include <functional>
 #include <iostream>
+#include <string>
 #include <unordered_map>
 #include <vector>
 
@@ -6,13 +8,10 @@
 
 using namespace std;
 
-int main(void) {
+int main() {
   HashTable<string, int> ht;
 
-  string k = "Hello";
-  auto h = ht.Hash(k);
-
-  cout << h << endl;
+  unordered_map<string, int> ma;
 
   return 0;
 }
