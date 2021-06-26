@@ -927,7 +927,7 @@ Node<K, V>* LinkedList<K, V>::Find(const V& data) const {
     return nullptr;
   }
 
-  Node<T>* node = this->head;
+  Node<K, V>* node = this->head;
   while (node) {
     if (node->value == data) {
       return node;
@@ -945,7 +945,7 @@ Node<K, V>* LinkedList<K, V>::Find(const K& key) const {
     return nullptr;
   }
 
-  Node<T>* node = this->head;
+  Node<K, V>* node = this->head;
 
   while (node) {
     if (node->key == key) {

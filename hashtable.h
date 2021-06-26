@@ -77,8 +77,7 @@ class HashTable {
   [[nodiscard]] unsigned long long int Hash(const K&);
 
   float LoadFactor() const;
-
-  int MaxLoadFactor();
+  float MaxLoadFactor() const;
 };
 
 template <typename K, typename V, typename H>
@@ -88,7 +87,25 @@ HashTable<K, V, H>::HashTable()
 template <typename K, typename V, typename H>
 HashTable<K, V, H>::HashTable(int bucketCount)
     : size(0), buckets(RoundUp(bucketCount, 8)) {
-  table = new LinkedList<K, V>[buckets]
+  table = new LinkedList<K, V>[buckets];
+}
+
+template <typename K, typename V, typename H>
+HashTable<K, V, H>::HashTable(const HashTable<K, V, H>& otherTable) {
+  for (int i = 0; i < otherTable.buckets; i++) {
+    //
+  }
+}
+
+template <typename K, typename V, typename H>
+HashTable<K, V, H>::HashTable(HashTable<K, V, H>&& otherTable) {
+  this->buckets = otherTable.buckets;
+  this->size = otherTable.size;
+  this->table = otherTable.table;
+
+  otherTable.size = 0;
+  otherTable.buckets = 0;
+  otherTable.table = nullptr;
 }
 
 template <typename K, typename V, typename H>
@@ -123,13 +140,25 @@ bool HashTable<K, V, H>::Key(const K& keyOne, const K& keyTwo) {
 
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Insert(const K& key, const V& value) {
-  if (LoadFactor() >= 2) {
+  if (LoadFactor() >= 1) {
     Resize();
   }
 
   unsigned long long int hashedKey = Hash(key);
   LinkedList<K, V>& bucket = table[hashedKey];
   bucket.PushBack(key, value);
+  this->size++;
+}
+
+template <typename K, typename V, typename H>
+void HashTable<K, V, H>::Insert(const K& key, V&& value) {
+  if (LoadFactor() >= 1) {
+    Resize();
+  }
+
+  unsigned long long int hashedKey = Hash(key);
+  LinkedList<K, V>& bucket = table[hashedKey];
+  bucket.PushBack(key, std::move(value));
   this->size++;
 }
 
@@ -156,14 +185,16 @@ template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Resize() {
   int newBucketAmount = buckets * 3;
   LinkedList<K, V>* newTable = new LinkedList<K, V>[newBucketAmount];
-  this->table = newTable;
   LinkedList<K, V>* oldTable = this->table;
+  this->table = newTable;
 
   for (int i = 0; i < buckets; i++) {
     LinkedList<K, V> bucket = oldTable[i];
 
     while (bucket.Head() != nullptr) {
-      //
+      K key = bucket.Head()->key;
+      Insert(key, std::move(bucket.Head()->value));
+      bucket.PopFront();
     }
   }
 
@@ -189,7 +220,6 @@ const V& HashTable<K, V, H>::operator[](const K&) const {
 
 template <typename K, typename V, typename H>
 V& HashTable<K, V, H>::operator[](const K&) {
-  template <typename K, typename V, typename H>
   //
 }
 
