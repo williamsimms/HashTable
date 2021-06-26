@@ -20,6 +20,7 @@
         "tuple": "cpp",
         "utility": "cpp",
         "type_traits": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "iosfwd": "cpp"
     }
 }

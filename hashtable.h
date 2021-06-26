@@ -1,6 +1,7 @@
 #ifndef HASH_TABLE_H
 #define HASH_TABLE_H
 
+#include <cassert>
 #include <functional>
 #include <initializer_list>
 #include <memory>
@@ -46,6 +47,7 @@ class HashTable {
 
   void Clear();
   void Insert(const K& key, const V& value);
+  void Insert(const K& key, V&& value);
 
   void Erase(const K&);
 
@@ -77,15 +79,6 @@ class HashTable {
   float LoadFactor() const;
 
   int MaxLoadFactor();
-
-  // begin()
-  // cbegin()
-  // end()
-  // cend()
-  // rbegin()
-  // rend();
-  // crbegin()
-  // crend();
 };
 
 template <typename K, typename V, typename H>
@@ -130,7 +123,7 @@ bool HashTable<K, V, H>::Key(const K& keyOne, const K& keyTwo) {
 
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Insert(const K& key, const V& value) {
-  if (LoadFactor() >= 1) {
+  if (LoadFactor() >= 2) {
     Resize();
   }
 
@@ -144,6 +137,9 @@ template <typename K, typename V, typename H>
 V& HashTable<K, V, H>::At(const K& key) {
   unsigned long long int hashedKey = Hash(key);
   LinkedList<K, V> bucket = table[hashedKey];
+  Node<K, V>* node = bucket.Find(key);
+  assert(node != nullptr);
+  return node->value;
 }
 
 template <typename K, typename V, typename H>
@@ -158,7 +154,21 @@ void HashTable<K, V, H>::Reserve(int count) {
 
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Resize() {
-  //
+  int newBucketAmount = buckets * 3;
+  LinkedList<K, V>* newTable = new LinkedList<K, V>[newBucketAmount];
+  this->table = newTable;
+  LinkedList<K, V>* oldTable = this->table;
+
+  for (int i = 0; i < buckets; i++) {
+    LinkedList<K, V> bucket = oldTable[i];
+
+    while (bucket.Head() != nullptr) {
+      //
+    }
+  }
+
+  delete[] oldTable;
+  this->buckets = newBucketAmount;
 }
 
 template <typename K, typename V, typename H>
@@ -170,6 +180,17 @@ int HashTable<K, V, H>::BucketSize(const K& key) const {
   unsigned long long int hashedKey = Hash(key);
   LinkedList<K, V> bucket = table[hashedKey];
   return bucket.Size();
+}
+
+template <typename K, typename V, typename H>
+const V& HashTable<K, V, H>::operator[](const K&) const {
+  //
+}
+
+template <typename K, typename V, typename H>
+V& HashTable<K, V, H>::operator[](const K&) {
+  template <typename K, typename V, typename H>
+  //
 }
 
 #endif

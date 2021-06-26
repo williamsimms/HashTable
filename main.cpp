@@ -12,7 +12,11 @@ using namespace std;
 int main() {
   HashTable<string, int> ht;
 
-  cout << ht.LoadFactor() << endl;
+  // ht.Insert("William", 1);
+  // ht.Insert("Javier", 2);
+  // ht.Insert("Xavier", 2);
+  // ht.Insert("Anthony", 2);
+  // ht.Insert("Arthur", 2);
 
   return 0;
 }
