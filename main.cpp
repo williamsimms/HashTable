@@ -1,4 +1,6 @@
 #include <functional>
+#include <iomanip>
+#include <ios>
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -10,6 +12,8 @@
 using namespace std;
 
 int main() {
+  cout << boolalpha;
+
   HashTable<string, int> ht;
 
   int x = 5;
@@ -32,7 +36,8 @@ int main() {
   // ht.Insert("Arthudr", x);
   // ht.Insert("Arthudr", x);
 
-  ht.Clear();
+  HashTable<string, int> htt(std::move(ht));
+  cout << htt.Size() << endl;
 
   return 0;
 }

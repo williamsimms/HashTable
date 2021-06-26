@@ -101,17 +101,34 @@ HashTable<K, V, H>::HashTable(int bucketCount)
 
 template <typename K, typename V, typename H>
 HashTable<K, V, H>::HashTable(const HashTable<K, V, H>& otherTable) noexcept {
+  if (&otherTable == this) {
+    return;
+  }
+
+  this->table = new LinkedList<K, V>[otherTable.buckets];
+  this->buckets = otherTable.buckets;
+  this->size = 0;
+
   for (int i = 0; i < otherTable.buckets; i++) {
     LinkedList<K, V> bucket = otherTable.table[i];
+    Node<K, V>* node = bucket.Head();
+
+    while (node) {
+      Insert(node->key, node->value);
+      node = node->next;
+    }
   }
 }
 
 template <typename K, typename V, typename H>
 HashTable<K, V, H>::HashTable(HashTable<K, V, H>&& otherTable) noexcept {
-  this->buckets = otherTable.buckets;
-  this->size = otherTable.size;
-  this->table = otherTable.table;
+  if (&otherTable == this) {
+    return;
+  }
 
+  this->buckets = std::move(otherTable.buckets);
+  this->size = std::move(otherTable.size);
+  this->table = std::move(otherTable.table);
   otherTable.size = 0;
   otherTable.buckets = 0;
   otherTable.table = nullptr;
@@ -213,9 +230,16 @@ V& HashTable<K, V, H>::At(const K& key) {
   unsigned long long int hashedKey = Hash(key);
   LinkedList<K, V> bucket = table[hashedKey];
   Node<K, V>* node = bucket.Find(key);
-
   assert(node != nullptr);
+  return node->value;
+}
 
+template <typename K, typename V, typename H>
+const V& HashTable<K, V, H>::At(const K& key) const {
+  unsigned long long int hashedKey = Hash(key);
+  LinkedList<K, V> bucket = table[hashedKey];
+  Node<K, V>* node = bucket.Find(key);
+  assert(node != nullptr);
   return node->value;
 }
 
@@ -328,7 +352,7 @@ bool HashTable<K, V, H>::Empty() const {
 
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Erase(const K& key) {
-  //
+  unsigned long long int hashedKey = Hash(key);
 }
 
 template <typename K, typename V, typename H>
