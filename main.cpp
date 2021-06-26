@@ -22,8 +22,9 @@ int main() {
   ht.Insert("Arthdur", x);
   ht.Insert("Arthur", x);
   ht.Insert("Arthudr", x);
-
   // ht.Insert("Arthussfdgr", x);
+
+  // cout << ht["William"];
 
   // ht.Insert("Arthur", x);
   // ht.Insert("Arthusrd", x);
@@ -31,9 +32,7 @@ int main() {
   // ht.Insert("Arthudr", x);
   // ht.Insert("Arthudr", x);
 
-  cout << ht.LoadFactor() << endl;
-  cout << ht.Size() << endl;
-  cout << ht.BucketCount() << endl;
+  ht.Clear();
 
   return 0;
 }

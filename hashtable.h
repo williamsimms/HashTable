@@ -5,6 +5,7 @@
 #include <functional>
 #include <initializer_list>
 #include <memory>
+#include <ostream>
 #include <string>
 #include <utility>
 #include <vector>
@@ -25,6 +26,9 @@ class HashTable {
   using ConstValuePointerType = const V*;
   using ValueReferenceType = V&;
   using ConstValueReferenceType = const V&;
+  using LinkedListType = LinkedList<K, V>;
+  using NodeType = Node<K, V>;
+  using NodePointerType = Node<K, V>*;
 
  private:
   int size;
@@ -34,16 +38,15 @@ class HashTable {
  public:
   HashTable();
   HashTable(int);
-  HashTable(const HashTable<K, V, H>&);
-  HashTable(HashTable<K, V, H>&&);
+  HashTable(const HashTable<K, V, H>&) noexcept;
+  HashTable(HashTable<K, V, H>&&) noexcept;
   ~HashTable();
 
-  HashTable<K, V, H>& operator=(const HashTable<K, V, H>&);
-  HashTable<K, V, H>& operator=(HashTable<K, V, H>&&);
+  HashTable<K, V, H>& operator=(const HashTable<K, V, H>&) noexcept;
+  HashTable<K, V, H>& operator=(HashTable<K, V, H>&&) noexcept;
 
-  bool Empty() const;
-  int Size() const;
-  int MaxSize() const;
+  [[nodiscard]] bool Empty() const;
+  [[nodiscard]] int Size() const;
 
   void Clear();
   void Insert(const K& key, const V& value);
@@ -54,33 +57,34 @@ class HashTable {
   template <typename... Args>
   void Emplace(Args&&...);
 
-  V& At(const K&);
-  const V& At(const K&) const;
-  int Count(const K&) const;
-  int Count(int) const;
-  V& Find(const K&);
-  const V& Find(const K&) const;
-  bool Contains(const K&) const;
+  [[nodiscard]] V& At(const K&);
+  [[nodiscard]] const V& At(const K&) const;
+  [[nodiscard]] int Count(const K&) const;
+  [[nodiscard]] int Count(int) const;
+  [[nodiscard]] V& Find(const K&);
+  [[nodiscard]] const V& Find(const K&) const;
+  [[nodiscard]] bool Contains(const K&) const;
 
-  int BucketCount() const;
-  int MaxBucketCount() const;
-  int BucketSize(const K&) const;
-  const LinkedList<K, V>& Bucket(const K&) const;
+  [[nodiscard]] int BucketCount() const;
+
+  [[nodiscard]] int BucketSize(const K&) const;
+  [[nodiscard]] const LinkedList<K, V>& Bucket(const K&) const;
 
   void Reserve(int);
-  void Resize();
+  void Rehash();
 
-  bool Key(const K&, const K&);
+  [[nodiscard]] bool Key(const K&, const K&);
 
   const V& operator[](const K&) const;
   V& operator[](const K&);
 
   [[nodiscard]] unsigned long long int Hash(const K&);
+  [[nodiscard]] float LoadFactor() const;
+  [[nodiscard]] float MaxLoadFactor() const;
+  void PrintBucketSizes() const;
 
-  float LoadFactor() const;
-  float MaxLoadFactor() const;
-
-  void PrintBucketSizes();
+  template <typename X, typename Y, typename Z>
+  friend std::ostream& operator<<(std::ostream& os, const HashTable<X, Y>&);
 };
 
 template <typename K, typename V, typename H>
@@ -94,14 +98,14 @@ HashTable<K, V, H>::HashTable(int bucketCount)
 }
 
 template <typename K, typename V, typename H>
-HashTable<K, V, H>::HashTable(const HashTable<K, V, H>& otherTable) {
+HashTable<K, V, H>::HashTable(const HashTable<K, V, H>& otherTable) noexcept {
   for (int i = 0; i < otherTable.buckets; i++) {
-    //
+    LinkedList<K, V> bucket = otherTable.table[i];
   }
 }
 
 template <typename K, typename V, typename H>
-HashTable<K, V, H>::HashTable(HashTable<K, V, H>&& otherTable) {
+HashTable<K, V, H>::HashTable(HashTable<K, V, H>&& otherTable) noexcept {
   this->buckets = otherTable.buckets;
   this->size = otherTable.size;
   this->table = otherTable.table;
@@ -116,6 +120,18 @@ HashTable<K, V, H>::~HashTable() {
   this->buckets = 0;
   this->size = 0;
   this->table = nullptr;
+}
+
+template <typename K, typename V, typename H>
+HashTable<K, V, H>& HashTable<K, V, H>::operator=(
+    const HashTable<K, V, H>&) noexcept {
+  //
+}
+
+template <typename K, typename V, typename H>
+HashTable<K, V, H>& HashTable<K, V, H>::operator=(
+    HashTable<K, V, H>&&) noexcept {
+  //
 }
 
 template <typename K, typename V, typename H>
@@ -136,6 +152,11 @@ float HashTable<K, V, H>::LoadFactor() const {
 }
 
 template <typename K, typename V, typename H>
+float HashTable<K, V, H>::MaxLoadFactor() const {
+  return 1;
+}
+
+template <typename K, typename V, typename H>
 bool HashTable<K, V, H>::Key(const K& keyOne, const K& keyTwo) {
   unsigned long long int hashOne = Hash(keyOne);
   unsigned long long int hashTwo = Hash(keyTwo);
@@ -153,8 +174,8 @@ void HashTable<K, V, H>::Insert(const K& key, const V& value) {
     return;
   }
 
-  if (LoadFactor() >= 1.25) {
-    Resize();
+  if (LoadFactor() >= MaxLoadFactor()) {
+    Rehash();
   }
 
   bucket.PushBack(key, value);
@@ -172,8 +193,8 @@ void HashTable<K, V, H>::Insert(const K& key, V&& value) {
     return;
   }
 
-  if (LoadFactor() >= 1) {
-    Resize();
+  if (LoadFactor() >= MaxLoadFactor()) {
+    Rehash();
   }
 
   bucket.PushBack(key, std::move(value));
@@ -185,7 +206,9 @@ V& HashTable<K, V, H>::At(const K& key) {
   unsigned long long int hashedKey = Hash(key);
   LinkedList<K, V> bucket = table[hashedKey];
   Node<K, V>* node = bucket.Find(key);
+
   assert(node != nullptr);
+
   return node->value;
 }
 
@@ -196,23 +219,25 @@ int HashTable<K, V, H>::Size() const {
 
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Reserve(int count) {
-  //
+  int newBucketAmount = RoundUp(count, 8);
+  Resize(newBucketAmount);
 }
 
 template <typename K, typename V, typename H>
-void HashTable<K, V, H>::Resize() {
-  int newBucketAmount = this->buckets * 3;
+void HashTable<K, V, H>::Rehash() {
+  int oldBucketAmount = this->buckets;
+  int newBucketAmount = oldBucketAmount * 3;
   LinkedList<K, V>* newTable = new LinkedList<K, V>[newBucketAmount];
   LinkedList<K, V>* oldTable = this->table;
   this->table = newTable;
-  int oldBucketAmount = this->buckets;
+  this->size = 0;
   this->buckets = newBucketAmount;
 
   for (int i = 0; i < oldBucketAmount; i++) {
-    LinkedList<K, V> bucket = oldTable[i];
+    LinkedList<K, V>& bucket = oldTable[i];
     Node<K, V>* node = bucket.Head();
 
-    while (node) {
+    while (node != nullptr) {
       Insert(node->key, std::move(node->value));
       node = node->next;
       bucket.PopFront();
@@ -234,13 +259,13 @@ int HashTable<K, V, H>::BucketSize(const K& key) const {
 }
 
 template <typename K, typename V, typename H>
-const V& HashTable<K, V, H>::operator[](const K&) const {
-  //
+const V& HashTable<K, V, H>::operator[](const K& key) const {
+  return At(key);
 }
 
 template <typename K, typename V, typename H>
-V& HashTable<K, V, H>::operator[](const K&) {
-  //
+V& HashTable<K, V, H>::operator[](const K& key) {
+  return At(key);
 }
 
 template <typename K, typename V, typename H>
@@ -257,7 +282,7 @@ int HashTable<K, V, H>::Count(int index) const {
 }
 
 template <typename K, typename V, typename H>
-void HashTable<K, V, H>::PrintBucketSizes() {
+void HashTable<K, V, H>::PrintBucketSizes() const {
   for (int i = 0; i < buckets; i++) {
     std::cout << table[i].Size() << " ";
   }
@@ -292,6 +317,22 @@ bool HashTable<K, V, H>::Empty() const {
   }
 
   return true;
+}
+
+template <typename K, typename V, typename H>
+void HashTable<K, V, H>::Erase(const K& key) {
+  //
+}
+
+template <typename K, typename V, typename H>
+void HashTable<K, V, H>::Clear() {
+  delete[] table;
+}
+
+template <typename K, typename V, typename H>
+std::ostream& operator<<(std::ostream& os, const HashTable<K, V, H>& table) {
+  table.PrintBucketSizes();
+  return os;
 }
 
 #endif
