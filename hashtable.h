@@ -78,6 +78,8 @@ class HashTable {
   const V& operator[](const K&) const;
   V& operator[](const K&);
 
+  bool operator==(const HashTable<K, V, H>&) const;
+
   [[nodiscard]] unsigned long long int Hash(const K&);
   [[nodiscard]] float LoadFactor() const;
   [[nodiscard]] float MaxLoadFactor() const;
@@ -117,6 +119,7 @@ HashTable<K, V, H>::HashTable(HashTable<K, V, H>&& otherTable) noexcept {
 
 template <typename K, typename V, typename H>
 HashTable<K, V, H>::~HashTable() {
+  delete[] table;
   this->buckets = 0;
   this->size = 0;
   this->table = nullptr;
@@ -124,14 +127,18 @@ HashTable<K, V, H>::~HashTable() {
 
 template <typename K, typename V, typename H>
 HashTable<K, V, H>& HashTable<K, V, H>::operator=(
-    const HashTable<K, V, H>&) noexcept {
-  //
+    const HashTable<K, V, H>& otherTable) noexcept {
+  if (this == &otherTable) {
+    return;
+  }
 }
 
 template <typename K, typename V, typename H>
 HashTable<K, V, H>& HashTable<K, V, H>::operator=(
-    HashTable<K, V, H>&&) noexcept {
-  //
+    HashTable<K, V, H>&& otherTable) noexcept {
+  if (this == &otherTable) {
+    return;
+  }
 }
 
 template <typename K, typename V, typename H>
@@ -327,6 +334,36 @@ void HashTable<K, V, H>::Erase(const K& key) {
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Clear() {
   delete[] table;
+  table = nullptr;
+  size = 0;
+  buckets = 0;
+}
+
+template <typename K, typename V, typename H>
+bool HashTable<K, V, H>::operator==(
+    const HashTable<K, V, H>& otherTable) const {
+  if (this == &otherTable) {
+    return true;
+  }
+
+  if (size != otherTable.size) {
+    return false;
+  }
+
+  if (buckets != otherTable.buckets) {
+    return false;
+  }
+
+  for (int i = 0; i < buckets; i++) {
+    LinkedList<K, V>& bucket = table[i];
+    LinkedList<K, V>& otherTableBucket = otherTable.table[i];
+
+    if (bucket != otherTableBucket) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 template <typename K, typename V, typename H>
