@@ -57,6 +57,7 @@ class HashTable {
   V& At(const K&);
   const V& At(const K&) const;
   int Count(const K&) const;
+  int Count(int) const;
   V& Find(const K&);
   const V& Find(const K&) const;
   bool Contains(const K&) const;
@@ -221,6 +222,19 @@ const V& HashTable<K, V, H>::operator[](const K&) const {
 template <typename K, typename V, typename H>
 V& HashTable<K, V, H>::operator[](const K&) {
   //
+}
+
+template <typename K, typename V, typename H>
+int HashTable<K, V, H>::Count(const K& key) const {
+  unsigned long long int hashedKey = Hash(key);
+  LinkedList<K, V> bucket = this->table[hashedKey];
+  return bucket.Size();
+}
+
+template <typename K, typename V, typename H>
+int HashTable<K, V, H>::Count(int index) const {
+  LinkedList<K, V> bucket = this->table[index];
+  return bucket.Size();
 }
 
 #endif
