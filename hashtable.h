@@ -131,7 +131,8 @@ int HashTable<K, V, H>::BucketCount() const {
 
 template <typename K, typename V, typename H>
 float HashTable<K, V, H>::LoadFactor() const {
-  return this->size / this->buckets;
+  float loadFactor = (float)this->size / (float)this->buckets;
+  return loadFactor;
 }
 
 template <typename K, typename V, typename H>
@@ -149,8 +150,15 @@ void HashTable<K, V, H>::Insert(const K& key, const V& value) {
 
   unsigned long long int hashedKey = Hash(key);
   LinkedList<K, V>& bucket = table[hashedKey];
-  bucket.PushBack(key, value);
-  this->size++;
+  Node<K, V>* node = bucket.Find(key);
+
+  if (!node) {
+    bucket.PushBack(key, std::move(value));
+    this->size++;
+    return;
+  }
+
+  node->value = value;
 }
 
 template <typename K, typename V, typename H>
@@ -166,6 +174,7 @@ void HashTable<K, V, H>::Insert(const K& key, V&& value) {
   if (!node) {
     bucket.PushBack(key, std::move(value));
     this->size++;
+    return;
   }
 
   node->value = value;
@@ -192,17 +201,19 @@ void HashTable<K, V, H>::Reserve(int count) {
 
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Resize() {
-  int newBucketAmount = buckets * 3;
+  int newBucketAmount = this->buckets * 3;
   LinkedList<K, V>* newTable = new LinkedList<K, V>[newBucketAmount];
   LinkedList<K, V>* oldTable = this->table;
   this->table = newTable;
 
   for (int i = 0; i < buckets; i++) {
     LinkedList<K, V> bucket = oldTable[i];
+    Node<K, V>* node = bucket.Head();
 
-    while (bucket.Head() != nullptr) {
-      K key = bucket.Head()->key;
+    while (node) {
+      K key = node->key;
       Insert(key, std::move(bucket.Head()->value));
+      node = node->next;
       bucket.PopFront();
     }
   }
@@ -255,6 +266,8 @@ void HashTable<K, V, H>::PrintBucketSizes() {
 template <typename K, typename V, typename H>
 const LinkedList<K, V>& HashTable<K, V, H>::Bucket(const K& key) const {
   unsigned long long int hashedKey = Hash(key);
+  LinkedList<K, V> bucket = this->table[hashedKey];
+  return bucket;
 }
 
 template <typename K, typename V, typename H>
@@ -270,6 +283,15 @@ const V& HashTable<K, V, H>::Find(const K& key) const {
 template <typename K, typename V, typename H>
 bool HashTable<K, V, H>::Contains(const K& key) const {
   //
+}
+
+template <typename K, typename V, typename H>
+bool HashTable<K, V, H>::Empty() const {
+  if (size > 0) {
+    return false;
+  }
+
+  return true;
 }
 
 #endif
