@@ -148,6 +148,22 @@ HashTable<K, V, H>& HashTable<K, V, H>::operator=(
   if (this == &otherTable) {
     return;
   }
+
+  this->Clear();
+  this->table = new LinkedList<K, V>[otherTable.buckets];
+  this->buckets = otherTable.buckets;
+
+  for (int i = 0; i < otherTable.buckets; i++) {
+    LinkedList<K, V> bucket = otherTable.table[i];
+    Node<K, V>* node = bucket.Head();
+
+    while (node) {
+      Insert(node->key, node->value);
+      node = node->next;
+    }
+  }
+
+  return *this;
 }
 
 template <typename K, typename V, typename H>
@@ -156,6 +172,15 @@ HashTable<K, V, H>& HashTable<K, V, H>::operator=(
   if (this == &otherTable) {
     return;
   }
+
+  this->Clear();
+  this->buckets = std::move(otherTable.buckets);
+  this->size = std::move(otherTable.size);
+  this->table = std::move(otherTable.table);
+  otherTable.size = 0;
+  otherTable.buckets = 0;
+  otherTable.table = nullptr;
+  return *this;
 }
 
 template <typename K, typename V, typename H>
