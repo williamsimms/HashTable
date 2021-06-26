@@ -144,40 +144,40 @@ bool HashTable<K, V, H>::Key(const K& keyOne, const K& keyTwo) {
 
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Insert(const K& key, const V& value) {
-  if (LoadFactor() >= 1) {
-    Resize();
-  }
-
   unsigned long long int hashedKey = Hash(key);
   LinkedList<K, V>& bucket = table[hashedKey];
   Node<K, V>* node = bucket.Find(key);
 
-  if (!node) {
-    bucket.PushBack(key, std::move(value));
-    this->size++;
+  if (node) {
+    node->value = value;
     return;
   }
 
-  node->value = value;
+  if (LoadFactor() >= 1.25) {
+    Resize();
+  }
+
+  bucket.PushBack(key, value);
+  this->size++;
 }
 
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Insert(const K& key, V&& value) {
-  if (LoadFactor() >= 1) {
-    Resize();
-  }
-
   unsigned long long int hashedKey = Hash(key);
   LinkedList<K, V>& bucket = table[hashedKey];
   Node<K, V>* node = bucket.Find(key);
 
-  if (!node) {
-    bucket.PushBack(key, std::move(value));
-    this->size++;
+  if (node) {
+    node->value = value;
     return;
   }
 
-  node->value = value;
+  if (LoadFactor() >= 1) {
+    Resize();
+  }
+
+  bucket.PushBack(key, std::move(value));
+  this->size++;
 }
 
 template <typename K, typename V, typename H>
@@ -205,21 +205,21 @@ void HashTable<K, V, H>::Resize() {
   LinkedList<K, V>* newTable = new LinkedList<K, V>[newBucketAmount];
   LinkedList<K, V>* oldTable = this->table;
   this->table = newTable;
+  int oldBucketAmount = this->buckets;
+  this->buckets = newBucketAmount;
 
-  for (int i = 0; i < buckets; i++) {
+  for (int i = 0; i < oldBucketAmount; i++) {
     LinkedList<K, V> bucket = oldTable[i];
     Node<K, V>* node = bucket.Head();
 
     while (node) {
-      K key = node->key;
-      Insert(key, std::move(bucket.Head()->value));
+      Insert(node->key, std::move(node->value));
       node = node->next;
       bucket.PopFront();
     }
   }
 
   delete[] oldTable;
-  this->buckets = newBucketAmount;
 }
 
 template <typename K, typename V, typename H>

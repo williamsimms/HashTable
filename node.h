@@ -22,8 +22,10 @@ class Node {
   Node(const Node<K, V>&);
   Node(Node<K, V>&&);
   ~Node();
-  V Data() const;
-  void SetData(V value);
+  V Value() const;
+  K Key() const;
+  void SetKey(const K& key);
+  void SetValue(const V& value);
   void SetNext(Node<K, V>* next);
   void Print();
   void SetPrevious(Node<K, V>* previous);
@@ -73,7 +75,12 @@ template <typename K, typename V>
 Node<K, V>::Node(Node<K, V>&&) = default;
 
 template <typename K, typename V>
-V Node<K, V>::Data() const {
+K Node<K, V>::Key() const {
+  return this->key;
+}
+
+template <typename K, typename V>
+V Node<K, V>::Value() const {
   return this->value;
 }
 
@@ -94,8 +101,13 @@ void Node<K, V>::SetNext(Node<K, V>* nextNode) {
 }
 
 template <typename K, typename V>
-void Node<K, V>::SetData(V newData) {
-  this->value = newData;
+void Node<K, V>::SetKey(const K& newKey) {
+  this->key = newKey;
+}
+
+template <typename K, typename V>
+void Node<K, V>::SetValue(const V& newValue) {
+  this->value = newValue;
 }
 
 template <typename K, typename V>
@@ -105,7 +117,7 @@ void Node<K, V>::Print() {
 
 template <typename K, typename V>
 std::ostream& operator<<(std::ostream& os, const Node<K, V>& node) {
-  os << node.GetData();
+  os << node.Value();
   return os;
 }
 
