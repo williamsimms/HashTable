@@ -10,7 +10,7 @@
 using namespace std;
 
 int main() {
-  HashTable<string, int> ht(100);
+  HashTable<string, int> ht;
 
   // ht.Insert("William", 1);
   // ht.Insert("Javier", 2);
@@ -26,8 +26,6 @@ int main() {
   // ht.Insert("Arthusr", 2);
   // ht.Insert("Arthudr", 2);
   // ht.Insert("Arthudr", 2);
-
-  cout << ht.BucketCount();
 
   return 0;
 }

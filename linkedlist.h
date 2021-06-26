@@ -195,6 +195,7 @@ class LinkedList {
   void PopFront();
   void PopBack();
   void PopAt(int index);
+  void PopKey(const K&);
 
   [[nodiscard]] int Count(const V& value) const;
 
@@ -956,6 +957,26 @@ Node<K, V>* LinkedList<K, V>::Find(const K& key) const {
   }
 
   return nullptr;
+}
+
+template <typename K, typename V>
+void LinkedList<K, V>::PopKey(const K& key) {
+  if (!this->head && !this->tail) {
+    return;
+  }
+
+  Node<K, V>* node = this->head;
+  int index = 0;
+
+  while (node) {
+    if (node->key == key) {
+      PopAt(index);
+      break;
+    }
+
+    index++;
+    node = node->next;
+  }
 }
 
 #endif

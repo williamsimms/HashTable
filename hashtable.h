@@ -79,6 +79,8 @@ class HashTable {
 
   float LoadFactor() const;
   float MaxLoadFactor() const;
+
+  void PrintBucketSizes();
 };
 
 template <typename K, typename V, typename H>
@@ -119,7 +121,7 @@ HashTable<K, V, H>::~HashTable() {
 template <typename K, typename V, typename H>
 unsigned long long int HashTable<K, V, H>::Hash(const K& key) {
   unsigned long long int hash = H()(key);
-  return hash % buckets;
+  return (hash * 17) % buckets;
 }
 
 template <typename K, typename V, typename H>
@@ -159,8 +161,14 @@ void HashTable<K, V, H>::Insert(const K& key, V&& value) {
 
   unsigned long long int hashedKey = Hash(key);
   LinkedList<K, V>& bucket = table[hashedKey];
-  bucket.PushBack(key, std::move(value));
-  this->size++;
+  Node<K, V>* node = bucket.Find(key);
+
+  if (!node) {
+    bucket.PushBack(key, std::move(value));
+    this->size++;
+  }
+
+  node->value = value;
 }
 
 template <typename K, typename V, typename H>
@@ -235,6 +243,33 @@ template <typename K, typename V, typename H>
 int HashTable<K, V, H>::Count(int index) const {
   LinkedList<K, V> bucket = this->table[index];
   return bucket.Size();
+}
+
+template <typename K, typename V, typename H>
+void HashTable<K, V, H>::PrintBucketSizes() {
+  for (int i = 0; i < buckets; i++) {
+    std::cout << table[i].Size() << " ";
+  }
+}
+
+template <typename K, typename V, typename H>
+const LinkedList<K, V>& HashTable<K, V, H>::Bucket(const K& key) const {
+  unsigned long long int hashedKey = Hash(key);
+}
+
+template <typename K, typename V, typename H>
+V& HashTable<K, V, H>::Find(const K& key) {
+  //
+}
+
+template <typename K, typename V, typename H>
+const V& HashTable<K, V, H>::Find(const K& key) const {
+  //
+}
+
+template <typename K, typename V, typename H>
+bool HashTable<K, V, H>::Contains(const K& key) const {
+  //
 }
 
 #endif
