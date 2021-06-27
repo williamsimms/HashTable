@@ -405,7 +405,6 @@ template <typename K, typename V>
 void LinkedList<K, V>::PushFront(const K& key, const V& value) noexcept {
   if (!this->head && !this->tail) {
     Node<K, V>* newNode = new Node<K, V>(key, value);
-    std::cout << newNode->value << std::endl;
     this->head = newNode;
     this->tail = newNode;
     this->length++;

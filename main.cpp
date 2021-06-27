@@ -42,7 +42,7 @@ int main() {
   HashTable<string, Vector3> htt;
   htt.Insert("Stirng", v);
 
-  // cout << htt.At("Stirng") << endl;
+  cout << htt.At("Stirng") << endl;
 
   return 0;
 }
