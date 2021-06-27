@@ -37,12 +37,12 @@ int main() {
   // ht.Insert("Arthudr", x);
   // ht.Insert("Arthudr", x);
 
-  Vector3 v(1, 2, 3);
+  Vector3 v(1, 2, 2);
 
   HashTable<string, Vector3> htt;
   htt.Insert("Stirng", v);
 
-  // cout << htt["Stirng"] << endl;
+  // cout << htt.At("Stirng") << endl;
 
   return 0;
 }

@@ -1,3 +1,4 @@
+#pragma once
 #ifndef HASH_TABLE_H
 #define HASH_TABLE_H
 
@@ -214,8 +215,6 @@ bool HashTable<K, V, H>::Key(const K& keyOne, const K& keyTwo) {
 
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Insert(const K& key, const V& value) {
-  std::cout << value << std::endl;
-
   unsigned long long int hashedKey = Hash(key);
   LinkedList<K, V>& bucket = table[hashedKey];
   Node<K, V>* node = bucket.Find(key);
