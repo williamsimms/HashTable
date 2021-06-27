@@ -68,7 +68,6 @@ class HashTable {
 
   [[nodiscard]] int BucketCount() const;
 
-  [[nodiscard]] int BucketSize(const K&) const;
   [[nodiscard]] const LinkedList<K, V>& Bucket(const K&) const;
 
   void Reserve(int);
@@ -325,13 +324,6 @@ void HashTable<K, V, H>::Rehash() {
 }
 
 template <typename K, typename V, typename H>
-int HashTable<K, V, H>::BucketSize(const K& key) const {
-  unsigned long long int hashedKey = Hash(key);
-  LinkedList<K, V>& bucket = table[hashedKey];
-  return bucket.Size();
-}
-
-template <typename K, typename V, typename H>
 V& HashTable<K, V, H>::operator[](const K& key) {
   bool alreadyInTable = Contains(key);
 
@@ -422,9 +414,9 @@ bool HashTable<K, V, H>::Erase(const K& key) {
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Clear() {
   delete[] table;
-  table = nullptr;
+  table = new LinkedList<K, V[8]>;
+  buckets = 8;
   size = 0;
-  buckets = 0;
 }
 
 template <typename K, typename V, typename H>

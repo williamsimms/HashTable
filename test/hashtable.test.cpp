@@ -30,26 +30,27 @@ TEST_CASE("Copy Assignment Operator",
   //
 }
 
-TEST_CASE("", "[bool Empty() const]") {
+TEST_CASE(
+    "Checks if the Hash Table is Empty, Return true if the Hash Table is "
+    "Empty, returns false otherwise.",
+    "[bool Empty() const]") {
   //
 }
 
-TEST_CASE("", "[int Size() const]") {
+TEST_CASE("Returns the Size of the Hash Table.", "[int Size() const]") {
   //
 }
 
-TEST_CASE("", "[void Clear()]") {
+TEST_CASE("Clears the HashTable, sets the size to zero.", "[void Clear()]") {
   //
 }
 
-TEST_CASE("Inserts a New Element to the Hash Table.",
+TEST_CASE("Inserts a New Element to the Hash Table using L Value.",
           "[void Insert(const K& key, const V& value)]") {
-  SECTION("Inserts a new Element to the HashTable.") {
-    //
-  }
+  //
 }
 
-TEST_CASE("Inserts a New Element to the Hash Table.",
+TEST_CASE("Inserts a New Element to the Hash Table Using R Value.",
           "[void Insert(const K& key, V&& value)]") {
   SECTION("Inserts a new Element to the HashTable using L Value.") {
     //
@@ -63,63 +64,77 @@ TEST_CASE("Emplaces a new Element into the hashtable.",
   }
 }
 
-TEST_CASE("", "[bool Erase(const K&)]") {
+TEST_CASE("Erases an Element in the Hash Table Using the provided Key.",
+          "[bool Erase(const K&)]") {
   //
 }
 
-TEST_CASE("", "[V& At(const K&)]") {
+TEST_CASE("Returns a Reference to th Element at the Provided Key.",
+          "[V& At(const K&)]") {
   //
 }
 
-TEST_CASE("", "[const V& At(const K&)]") {
+TEST_CASE("Returns a Reference to th Element at the Provided Key.",
+          "[const V& At(const K&)]") {
   //
 }
 
-TEST_CASE("", "[int Count(const K&) const]") {
+TEST_CASE("Returns the Size of the bucket at the provided Key.",
+          "[int Count(const K&) const]") {
   //
 }
 
-TEST_CASE("", "[int Count(int) const]") {
+TEST_CASE("Returns the Size of the bucket at the provided index.",
+          "[int Count(int) const]") {
   //
 }
 
-TEST_CASE("", "[V& Find(const K&)]") {
+TEST_CASE("Returns a reference to the Element at the provided Key.",
+          "[V& Find(const K&)]") {
   //
 }
 
-TEST_CASE("", "[const V& Find(const K&) const]") {
+TEST_CASE("Returns a reference to the Element at the provided Key.",
+          "[const V& Find(const K&) const]") {
   //
 }
 
-TEST_CASE("", "[bool Contains(const K&) const]") {
+TEST_CASE("Returns true if the element is in the HashTable, false otherwise.",
+          "[bool Contains(const K&) const]") {
   //
 }
 
-TEST_CASE("", "[int BucketCount() const]") {
+TEST_CASE("Retruns the amount of Buckets in the HashTable.",
+          "[int BucketCount() const]") {
   //
 }
 
-TEST_CASE("", "[int BucketSize(const K&) const]") {
+TEST_CASE("Retunrns the bucket at the specified key.",
+          "[const LinkedList<K, V>& Bucket(const K&) const]") {
   //
 }
 
-TEST_CASE("", "[const LinkedList<K, V>& Bucket(const K&) const]") {
+TEST_CASE("Reserves the amount of buckets, provided in the parameter.",
+          "[void Reserve(int)]") {
   //
 }
 
-TEST_CASE("", "[void Reserve(int)]") {
+TEST_CASE(
+    "Rehashes the Hash Table, increases the bucket size by three times its "
+    "current size.",
+    "[void Rehash()]") {
   //
 }
 
-TEST_CASE("", "[void Rehash()]") {
+TEST_CASE("Checks if two provided keys are equal.",
+          "[bool Key(const K&, const K&)]") {
   //
 }
 
-TEST_CASE("", "[bool Key(const K&, const K&)]") {
-  //
-}
-
-TEST_CASE("", "[V& operator[](const K&)]") {
+TEST_CASE(
+    "Returns a Reference to an Element in the HashTable. Can also be used to "
+    "insert a new element in the HashTable.",
+    "[V& operator[](const K&)]") {
   //
 }
 
