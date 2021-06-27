@@ -9,11 +9,8 @@ build:
 run:
 	clang++ $(CXXFLAGS) -o main main.cpp && ./main && rm -f main
 
-test:
-	make test-table
-
 test-table:
-	clang++ $(CXXFLAGS) -o linkedlisttest test/hashtable.test.cpp && ./hashtabletest && rm -f hashtabletest
+	clang++ $(CXXFLAGS) -o hashtabletest test/hashtable.test.cpp && ./hashtabletest && rm -f hashtabletest
 
 test-list:
 	clang++ $(CXXFLAGS) -o linkedlisttest test/linkedlist.test.cpp && ./linkedlisttest && rm -f linkedlisttest

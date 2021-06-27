@@ -50,6 +50,7 @@ class HashTable {
   [[nodiscard]] int Size() const;
 
   void Clear();
+  void Free();
   void Insert(const K& key, const V& value);
   void Insert(const K& key, V&& value);
 
@@ -147,7 +148,7 @@ HashTable<K, V, H>& HashTable<K, V, H>::operator=(
     return;
   }
 
-  this->Clear();
+  this->Free();
   this->table = new LinkedList<K, V>[otherTable.buckets];
   this->buckets = otherTable.buckets;
 
@@ -171,7 +172,7 @@ HashTable<K, V, H>& HashTable<K, V, H>::operator=(
     return;
   }
 
-  this->Clear();
+  this->Free();
   this->buckets = std::move(otherTable.buckets);
   this->size = std::move(otherTable.size);
   this->table = std::move(otherTable.table);
@@ -416,6 +417,14 @@ void HashTable<K, V, H>::Clear() {
   delete[] table;
   table = new LinkedList<K, V[8]>;
   buckets = 8;
+  size = 0;
+}
+
+template <typename K, typename V, typename H>
+void HashTable<K, V, H>::Free() {
+  delete[] table;
+  table = nullptr;
+  buckets = 0;
   size = 0;
 }
 

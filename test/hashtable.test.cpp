@@ -1,23 +1,49 @@
 #define CATCH_CONFIG_MAIN
 
 #include "../hashtable.h"
+#include <string>
 #include "../utility/Vector3.hpp"
 #include "../vendor/catch.hpp"
 
+using std::string;
+
 TEST_CASE("Default Constructor", "[HashTable()]") {
-  //
+  HashTable<string, int> table;
+  REQUIRE(table.Size() == 0);
+  REQUIRE(table.BucketCount() == 8);
 }
 
 TEST_CASE("Constructor with Bucket Size", "[HashTable(int)]") {
-  //
+  HashTable<string, int> table(100);
+  REQUIRE(table.Size() == 0);
+  REQUIRE(table.BucketCount() == 104);
 }
 
 TEST_CASE("Copy Constructor", "[HashTable(const HashTable<K,V,H>&)]") {
-  //
+  HashTable<string, int> table;
+  table.Insert("hello", 1);
+  REQUIRE(table.Size() == 1);
+  REQUIRE(table.BucketCount() == 8);
+
+  HashTable<string, int> tableTwo(table);
+  REQUIRE(tableTwo.Size() == 1);
+  REQUIRE(tableTwo.BucketCount() == 8);
+  REQUIRE(table.Size() == 1);
+  REQUIRE(table.BucketCount() == 8);
 }
 
 TEST_CASE("Move Contructor", "[HashTable(HashTable<K,V,H>&&)]") {
-  //
+  HashTable<string, int> table;
+  table.Insert("hello", 1);
+  REQUIRE(table.Size() == 1);
+  REQUIRE(table.BucketCount() == 8);
+
+  HashTable<string, int> tableTwo(std::move(table));
+  REQUIRE(tableTwo.Size() == 1);
+  REQUIRE(tableTwo.BucketCount() == 8);
+
+  REQUIRE(table.Size() == 0);
+  REQUIRE(table.BucketCount() == 0);
 }
 
 TEST_CASE("Copy Assignment Operator",
@@ -25,7 +51,7 @@ TEST_CASE("Copy Assignment Operator",
   //
 }
 
-TEST_CASE("Copy Assignment Operator",
+TEST_CASE("Move Assignment Operator",
           "[HashTable<K, V, H>& operator=(HashTable<K, V, H>&&)]") {
   //
 }
@@ -69,12 +95,12 @@ TEST_CASE("Erases an Element in the Hash Table Using the provided Key.",
   //
 }
 
-TEST_CASE("Returns a Reference to th Element at the Provided Key.",
+TEST_CASE("Returns a Reference to the Element at the Provided Key.",
           "[V& At(const K&)]") {
   //
 }
 
-TEST_CASE("Returns a Reference to th Element at the Provided Key.",
+TEST_CASE("Returns a const Reference to the Element at the Provided Key.",
           "[const V& At(const K&)]") {
   //
 }
@@ -89,13 +115,16 @@ TEST_CASE("Returns the Size of the bucket at the provided index.",
   //
 }
 
-TEST_CASE("Returns a reference to the Element at the provided Key.",
-          "[V& Find(const K&)]") {
+TEST_CASE(
+    "Returns a reference to the Element at the provided Key using Find Method.",
+    "[V& Find(const K&)]") {
   //
 }
 
-TEST_CASE("Returns a reference to the Element at the provided Key.",
-          "[const V& Find(const K&) const]") {
+TEST_CASE(
+    "Returns a const reference to the Element at the provided Key using Find "
+    "Method.",
+    "[const V& Find(const K&) const]") {
   //
 }
 
@@ -138,22 +167,23 @@ TEST_CASE(
   //
 }
 
-TEST_CASE("", "[bool operator==(const HashTable<K, V, H>&) const]") {
+TEST_CASE(
+    "Returns true if the Two Hash Tables are Deeply Equal, false otherwise.",
+    "[bool operator==(const HashTable<K, V, H>&) const]") {
   //
 }
 
-TEST_CASE("", "[unsigned long long int Hash(const K&) const]") {
+TEST_CASE("Hashes the provided key.",
+          "[unsigned long long int Hash(const K&) const]") {
   //
 }
 
-TEST_CASE("", "[float LoadFactor() const]") {
+TEST_CASE("Retuns the current Load Factor of the HashTable.",
+          "[float LoadFactor() const]") {
   //
 }
 
-TEST_CASE("", "[float MaxLoadFactor() const]") {
-  //
-}
-
-TEST_CASE("", "[void PrintBucketSizes() const]") {
+TEST_CASE("Returns the maximum allowed Load Factor of the HashTable.",
+          "[float MaxLoadFactor() const]") {
   //
 }
