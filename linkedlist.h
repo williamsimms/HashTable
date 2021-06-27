@@ -185,12 +185,10 @@ class LinkedList {
   Node<K, V>* At(int index) const noexcept;
 
   [[nodiscard]] bool Empty() const noexcept;
-  [[nodiscard]] bool Contains(const V& value) const noexcept;
   [[nodiscard]] bool Contains(const K& key) const noexcept;
 
   [[nodiscard]] int IndexOf(const V& data) const;
   [[nodiscard]] int LastIndexOf(const V& data) const;
-  Node<K, V>* Find(const V& data) const;
   Node<K, V>* Find(const K& data) const;
 
   void PopFront();
@@ -577,24 +575,6 @@ bool LinkedList<K, V>::Empty() const noexcept {
 }
 
 template <typename K, typename V>
-bool LinkedList<K, V>::Contains(const V& value) const noexcept {
-  if (!this->head && !this->tail) {
-    return false;
-  }
-
-  Node<K, V>* node = this->head;
-  while (node) {
-    if (node->value == value) {
-      return true;
-    }
-
-    node = node->next;
-  }
-
-  return false;
-}
-
-template <typename K, typename V>
 bool LinkedList<K, V>::Contains(const K& key) const noexcept {
   if (!this->head && !this->tail) {
     return false;
@@ -940,24 +920,6 @@ int LinkedList<K, V>::LastIndexOf(const V& data) const {
   }
 
   return indexOfNode;
-}
-
-template <typename K, typename V>
-Node<K, V>* LinkedList<K, V>::Find(const V& data) const {
-  if (!this->head && !this->tail) {
-    return nullptr;
-  }
-
-  Node<K, V>* node = this->head;
-  while (node) {
-    if (node->value == data) {
-      return node;
-    }
-
-    node = node->next;
-  }
-
-  return nullptr;
 }
 
 template <typename K, typename V>

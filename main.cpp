@@ -15,7 +15,7 @@ using namespace std;
 int main() {
   cout << boolalpha;
 
-  HashTable<string, int> ht;
+  HashTable<string, Vector3> ht;
 
   // int x = 5;
 
@@ -36,6 +36,12 @@ int main() {
   // ht.Insert("Arthusr", x);
   // ht.Insert("Arthudr", x);
   // ht.Insert("Arthudr", x);
+
+  //  unordered_map<string, int> map;
+  // map["Yello"] = 4;
+  // cout << map["Yello"] << endl;
+
+  cout << ht["Yello"];
 
   return 0;
 }

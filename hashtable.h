@@ -56,7 +56,7 @@ class HashTable {
   template <typename... Args>
   void Emplace(const K&, Args&&...);
 
-  void Erase(const K&);
+  bool Erase(const K&);
 
   [[nodiscard]] V& At(const K&);
   [[nodiscard]] const V& At(const K&) const;
@@ -76,7 +76,6 @@ class HashTable {
 
   [[nodiscard]] bool Key(const K&, const K&);
 
-  const V& operator[](const K&) const;
   V& operator[](const K&);
 
   bool operator==(const HashTable<K, V, H>&) const;
@@ -334,12 +333,13 @@ int HashTable<K, V, H>::BucketSize(const K& key) const {
 }
 
 template <typename K, typename V, typename H>
-const V& HashTable<K, V, H>::operator[](const K& key) const {
-  return At(key);
-}
-
-template <typename K, typename V, typename H>
 V& HashTable<K, V, H>::operator[](const K& key) {
+  bool alreadyInTable = Contains(key);
+
+  if (!alreadyInTable) {
+    Insert(key, V{});
+  }
+
   return At(key);
 }
 
@@ -361,6 +361,8 @@ void HashTable<K, V, H>::PrintBucketSizes() const {
   for (int i = 0; i < buckets; i++) {
     std::cout << table[i].Size() << " ";
   }
+
+  std::cout << std::endl;
 }
 
 template <typename K, typename V, typename H>
@@ -388,14 +390,8 @@ V& HashTable<K, V, H>::Find(const K& key) {
 template <typename K, typename V, typename H>
 const V& HashTable<K, V, H>::Find(const K& key) const {
   unsigned long long int hashedKey = Hash(key);
-
-  Node<K, V>* node = nullptr;
-
-  for (int i = 0; i < buckets; i++) {
-    LinkedList<K, V>& bucket = table[i];
-    node = bucket.Find(key);
-  }
-
+  LinkedList<K, V>& bucket = table[hashedKey];
+  Node<K, V>* node = bucket.Find(key);
   assert(node != nullptr);
   return node;
 }
@@ -403,16 +399,12 @@ const V& HashTable<K, V, H>::Find(const K& key) const {
 template <typename K, typename V, typename H>
 bool HashTable<K, V, H>::Contains(const K& key) const {
   unsigned long long int hashedKey = Hash(key);
+  LinkedList<K, V>& bucket = table[hashedKey];
+  bool bucketContainsKey = bucket.Contains(key);
 
-  for (int i = 0; i < buckets; i++) {
-    LinkedList<K, V>& bucket = table[i];
-    bool bucketContainsKey = bucket.Contains(key);
-
-    if (bucketContainsKey) {
-      return true;
-    }
+  if (bucketContainsKey) {
+    return true;
   }
-
   return false;
 }
 
@@ -426,8 +418,20 @@ bool HashTable<K, V, H>::Empty() const {
 }
 
 template <typename K, typename V, typename H>
-void HashTable<K, V, H>::Erase(const K& key) {
+bool HashTable<K, V, H>::Erase(const K& key) {
   unsigned long long int hashedKey = Hash(key);
+
+  for (int i = 0; i < buckets; i++) {
+    LinkedList<K, V>& bucket = table[i];
+    bool containsKey = bucket.Find(key);
+
+    if (containsKey) {
+      bucket.PopKey(key);
+      return true;
+    }
+  }
+
+  return false;
 }
 
 template <typename K, typename V, typename H>

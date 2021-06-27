@@ -1,15 +1,9 @@
 #define CATCH_CONFIG_MAIN
 #include "../linkedlist.h"
 
-#include <initializer_list>
-#include <vector>
-
 #include "../vendor/catch.hpp"
 
-using std::initializer_list;
-using std::vector;
-
-TEST_CASE("List inserts Node at head element of list.", "[Insert Head]") {
+TEST_CASE("List inserts Node at head element of list.", "[Push Front]") {
   LinkedList<int, int> list;
 
   list.PushFront(12, 12);
@@ -37,7 +31,7 @@ TEST_CASE("List inserts Node at head element of list.", "[Insert Head]") {
   REQUIRE(list.Head()->next->value == 114);
 }
 
-TEST_CASE("List inserts Node at tail element of list.", "[Insert Last]") {
+TEST_CASE("List inserts Node at tail element of list.", "[Push Back]") {
   LinkedList<int, int> list;
 
   list.PushBack(12, 12);
@@ -172,50 +166,17 @@ TEST_CASE(
     "[Contains]") {
   LinkedList<int, int> list;
 
-  list.PushFront(12, 1);
-  list.PushFront(12, 2);
-  list.PushFront(12, 3);
-  list.PushFront(12, 4);
-  list.PushFront(12, 5);
+  list.PushFront(4, 1);
+  list.PushFront(5, 2);
+  list.PushFront(1, 3);
+  list.PushFront(2, 4);
+  list.PushFront(11, 5);
 
-  bool containsOne = list.Contains(1);
-  bool containsTwo = list.Contains(2);
-  bool containsThree = list.Contains(3);
-  bool containsFour = list.Contains(4);
-  bool containsFive = list.Contains(5);
-
-  bool containsTwelve = list.Contains(12);
-  bool containsTwenty = list.Contains(20);
-  bool containsSix = list.Contains(6);
-
-  REQUIRE(containsOne == true);
-  REQUIRE(containsTwo == true);
-  REQUIRE(containsThree == true);
-  REQUIRE(containsFour == true);
-  REQUIRE(containsFive == true);
-
-  REQUIRE(containsTwelve == false);
-  REQUIRE(containsTwenty == false);
-  REQUIRE(containsSix == false);
-}
-
-TEST_CASE(
-    "Returns True or false depending on whether or not the element is present "
-    "within the Linked List. Works as a alias for Contains.",
-    "[Incluses]") {
-  LinkedList<int, int> list;
-
-  list.PushFront(12, 1);
-  list.PushFront(12, 2);
-  list.PushFront(12, 3);
-  list.PushFront(12, 4);
-  list.PushFront(12, 5);
-
-  bool containsOne = list.Contains(1);
-  bool containsTwo = list.Contains(2);
-  bool containsThree = list.Contains(3);
-  bool containsFour = list.Contains(4);
-  bool containsFive = list.Contains(5);
+  bool containsOne = list.Contains(4);
+  bool containsTwo = list.Contains(5);
+  bool containsThree = list.Contains(1);
+  bool containsFour = list.Contains(2);
+  bool containsFive = list.Contains(11);
 
   bool containsTwelve = list.Contains(12);
   bool containsTwenty = list.Contains(20);
@@ -232,7 +193,7 @@ TEST_CASE(
   REQUIRE(containsSix == false);
 }
 
-TEST_CASE("Returns the first Node of the Linked List", "[Get Head]") {
+TEST_CASE("Returns the first Node of the Linked List", "[Head]") {
   LinkedList<int, int> list;
 
   list.PushFront(1, 1);
@@ -253,7 +214,7 @@ TEST_CASE("Returns the first Node of the Linked List", "[Get Head]") {
   REQUIRE(list.Head()->value == 11);
 }
 
-TEST_CASE("Returns the last Node of the Linked List", "[Get Last]") {
+TEST_CASE("Returns the last Node of the Linked List", "[Tail]") {
   LinkedList<int, int> list;
 
   list.PushFront(1, 1);
