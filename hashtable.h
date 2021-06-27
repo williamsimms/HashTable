@@ -373,16 +373,47 @@ const LinkedList<K, V>& HashTable<K, V, H>::Bucket(const K& key) const {
 template <typename K, typename V, typename H>
 V& HashTable<K, V, H>::Find(const K& key) {
   unsigned long long int hashedKey = Hash(key);
+
+  Node<K, V>* node = nullptr;
+
+  for (int i = 0; i < buckets; i++) {
+    LinkedList<K, V>& bucket = table[i];
+    node = bucket.Find(key);
+  }
+
+  assert(node != nullptr);
+  return node;
 }
 
 template <typename K, typename V, typename H>
 const V& HashTable<K, V, H>::Find(const K& key) const {
   unsigned long long int hashedKey = Hash(key);
+
+  Node<K, V>* node = nullptr;
+
+  for (int i = 0; i < buckets; i++) {
+    LinkedList<K, V>& bucket = table[i];
+    node = bucket.Find(key);
+  }
+
+  assert(node != nullptr);
+  return node;
 }
 
 template <typename K, typename V, typename H>
 bool HashTable<K, V, H>::Contains(const K& key) const {
   unsigned long long int hashedKey = Hash(key);
+
+  for (int i = 0; i < buckets; i++) {
+    LinkedList<K, V>& bucket = table[i];
+    bool bucketContainsKey = bucket.Contains(key);
+
+    if (bucketContainsKey) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 template <typename K, typename V, typename H>

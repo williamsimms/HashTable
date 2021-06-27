@@ -186,6 +186,7 @@ class LinkedList {
 
   [[nodiscard]] bool Empty() const noexcept;
   [[nodiscard]] bool Contains(const V& value) const noexcept;
+  [[nodiscard]] bool Contains(const K& key) const noexcept;
 
   [[nodiscard]] int IndexOf(const V& data) const;
   [[nodiscard]] int LastIndexOf(const V& data) const;
@@ -584,6 +585,25 @@ bool LinkedList<K, V>::Contains(const V& value) const noexcept {
   Node<K, V>* node = this->head;
   while (node) {
     if (node->value == value) {
+      return true;
+    }
+
+    node = node->next;
+  }
+
+  return false;
+}
+
+template <typename K, typename V>
+bool LinkedList<K, V>::Contains(const K& key) const noexcept {
+  if (!this->head && !this->tail) {
+    return false;
+  }
+
+  Node<K, V>* node = this->head;
+
+  while (node) {
+    if (node->key == key) {
       return true;
     }
 
