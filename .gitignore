@@ -3,3 +3,4 @@ vendor
 .vscode
 *.exe
 main
+utility/Vector3.hpp

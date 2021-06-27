@@ -52,10 +52,10 @@ class HashTable {
   void Insert(const K& key, const V& value);
   void Insert(const K& key, V&& value);
 
-  void Erase(const K&);
-
   template <typename... Args>
-  void Emplace(Args&&...);
+  void Emplace(const K&, Args&&...);
+
+  void Erase(const K&);
 
   [[nodiscard]] V& At(const K&);
   [[nodiscard]] const V& At(const K&) const;
@@ -214,6 +214,8 @@ bool HashTable<K, V, H>::Key(const K& keyOne, const K& keyTwo) {
 
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Insert(const K& key, const V& value) {
+  std::cout << value << std::endl;
+
   unsigned long long int hashedKey = Hash(key);
   LinkedList<K, V>& bucket = table[hashedKey];
   Node<K, V>* node = bucket.Find(key);
@@ -236,6 +238,28 @@ void HashTable<K, V, H>::Insert(const K& key, V&& value) {
   unsigned long long int hashedKey = Hash(key);
   LinkedList<K, V>& bucket = table[hashedKey];
   Node<K, V>* node = bucket.Find(key);
+
+  if (node) {
+    node->value = value;
+    return;
+  }
+
+  if (LoadFactor() >= MaxLoadFactor()) {
+    Rehash();
+  }
+
+  bucket.PushBack(key, std::move(value));
+  this->size++;
+}
+
+template <typename K, typename V, typename H>
+template <typename... Args>
+void HashTable<K, V, H>::Emplace(const K& key, Args&&... args) {
+  unsigned long long int hashedKey = Hash(key);
+  LinkedList<K, V>& bucket = table[hashedKey];
+  Node<K, V>* node = bucket.Find(key);
+
+  V value = V(std::forward<Args>(args)...);
 
   if (node) {
     node->value = value;
@@ -302,10 +326,6 @@ void HashTable<K, V, H>::Rehash() {
 
   delete[] oldTable;
 }
-
-template <typename K, typename V, typename H>
-template <typename... Args>
-void HashTable<K, V, H>::Emplace(Args&&... args) {}
 
 template <typename K, typename V, typename H>
 int HashTable<K, V, H>::BucketSize(const K& key) const {
