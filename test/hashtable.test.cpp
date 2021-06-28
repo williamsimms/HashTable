@@ -209,35 +209,39 @@ TEST_CASE("Erases an Element in the Hash Table Using the provided Key.",
 
 TEST_CASE("Returns a Reference to the Element at the Provided Key.",
           "[V& At(const K&)]") {
-  //
-}
+  HashTable<string, int> table;
 
-TEST_CASE("Returns a const Reference to the Element at the Provided Key.",
-          "[const V& At(const K&)]") {
-  //
+  table.Insert("Hello", 5);
+  REQUIRE(table.Size() == 1);
+
+  table.Insert("Hi", 55);
+  REQUIRE(table.Size() == 2);
+
+  int value = table.At("Hi");
+  REQUIRE(value == 55);
+
+  value = table.At("Hello");
+  REQUIRE(value == 5);
 }
 
 TEST_CASE("Returns the Size of the bucket at the provided Key.",
           "[int Count(const K&) const]") {
-  //
+  HashTable<string, int> table;
+
+  int count = table.Count("Hello");
+  REQUIRE(count == 0);
+
+  table.Insert("Hello", 2);
+  count = table.Count("Hello");
+  REQUIRE(count == 1);
 }
 
 TEST_CASE("Returns the Size of the bucket at the provided index.",
           "[int Count(int) const]") {
-  //
-}
+  HashTable<string, int> table;
 
-TEST_CASE(
-    "Returns a reference to the Element at the provided Key using Find Method.",
-    "[V& Find(const K&)]") {
-  //
-}
-
-TEST_CASE(
-    "Returns a const reference to the Element at the provided Key using Find "
-    "Method.",
-    "[const V& Find(const K&) const]") {
-  //
+  int count = table.Count(1);
+  REQUIRE(count == 0);
 }
 
 TEST_CASE("Returns true if the element is in the HashTable, false otherwise.",
@@ -285,17 +289,17 @@ TEST_CASE(
   //
 }
 
-TEST_CASE("Hashes the provided key.",
-          "[unsigned long long int Hash(const K&) const]") {
-  //
-}
-
 TEST_CASE("Retuns the current Load Factor of the HashTable.",
           "[float LoadFactor() const]") {
-  //
+  HashTable<string, int> table;
+  REQUIRE(table.LoadFactor() == 0);
+
+  table.Insert("Hello", 2);
+  REQUIRE(table.LoadFactor() > 0);
 }
 
 TEST_CASE("Returns the maximum allowed Load Factor of the HashTable.",
           "[float MaxLoadFactor() const]") {
-  //
+  HashTable<string, int> table;
+  REQUIRE(table.MaxLoadFactor() == 1);
 }
