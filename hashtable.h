@@ -409,13 +409,19 @@ template <typename K, typename V, typename H>
 bool HashTable<K, V, H>::Erase(const K& key) {
   unsigned long long int hashedKey = Hash(key);
   LinkedList<K, V>& bucket = table[hashedKey];
-  return bucket.PopKey(key);
+  bool nodeGotRemoved = bucket.PopKey(key);
+  if (nodeGotRemoved) {
+    this->size--;
+    return true;
+  }
+
+  return false;
 }
 
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Clear() {
   delete[] table;
-  table = new LinkedList<K, V[8]>;
+  table = new LinkedList<K, V>[8];
   buckets = 8;
   size = 0;
 }

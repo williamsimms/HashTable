@@ -113,44 +113,98 @@ TEST_CASE("Clears the HashTable, sets the size to zero and resets the memory.",
           "[void Clear()]") {
   HashTable<string, int> table;
 
-  bool isEmpty = table.Empty();
-  REQUIRE(isEmpty == true);
-
-  table.Insert("hello", 1);
+  table.Insert("Hello", 1);
   REQUIRE(table.Size() == 1);
-  REQUIRE(table.BucketCount() == 8);
 
-  isEmpty = table.Empty();
-  REQUIRE(isEmpty == false);
+  table.Insert("Hi", 2);
+  REQUIRE(table.Size() == 2);
+
+  table.Clear();
+
+  REQUIRE(table.Size() == 0);
+  REQUIRE(table.BucketCount() == 8);
 }
 
 TEST_CASE("Clears the HashTable, sets the size to zero & frees the memory.",
           "[void Free()]") {
-  //
+  HashTable<string, int> table;
+
+  table.Insert("Hello", 1);
+  REQUIRE(table.Size() == 1);
+
+  table.Insert("Hi", 2);
+  REQUIRE(table.Size() == 2);
+
+  table.Free();
+
+  REQUIRE(table.Size() == 0);
+  REQUIRE(table.BucketCount() == 0);
 }
 
 TEST_CASE("Inserts a New Element to the Hash Table using L Value.",
           "[void Insert(const K& key, const V& value)]") {
-  //
+  HashTable<string, int> table;
+
+  int x = 5;
+  table.Insert("Hello", x);
+  REQUIRE(table.Size() == 1);
+
+  int y = 55;
+  table.Insert("Hi", y);
+  REQUIRE(table.Size() == 2);
 }
 
 TEST_CASE("Inserts a New Element to the Hash Table Using R Value.",
           "[void Insert(const K& key, V&& value)]") {
   SECTION("Inserts a new Element to the HashTable using L Value.") {
-    //
+    HashTable<string, int> table;
+
+    table.Insert("Hello", 5);
+    REQUIRE(table.Size() == 1);
+
+    table.Insert("Hi", 55);
+    REQUIRE(table.Size() == 2);
   }
 }
 
 TEST_CASE("Emplaces a new Element into the hashtable.",
           "[void Emplace(const K&, Args&&...)]") {
   SECTION("Inserts a new Element to the HashTable using L Value.") {
-    //
+    HashTable<string, Vector2> table;
+
+    table.Emplace("Hello", 1, 2);
+    REQUIRE(table.Size() == 1);
+
+    table.Emplace("Hi", 5, 5);
+    REQUIRE(table.Size() == 2);
   }
 }
 
 TEST_CASE("Erases an Element in the Hash Table Using the provided Key.",
           "[bool Erase(const K&)]") {
-  //
+  HashTable<string, int> table;
+
+  table.Insert("Hello", 5);
+  REQUIRE(table.Size() == 1);
+
+  table.Insert("Hi", 55);
+  REQUIRE(table.Size() == 2);
+
+  bool elementAtKeyRemoved = table.Erase("Hey");
+  REQUIRE(elementAtKeyRemoved == false);
+  REQUIRE(table.Size() == 2);
+
+  elementAtKeyRemoved = table.Erase("Hello");
+  REQUIRE(elementAtKeyRemoved == true);
+  REQUIRE(table.Size() == 1);
+
+  elementAtKeyRemoved = table.Erase("Hi");
+  REQUIRE(elementAtKeyRemoved == true);
+  REQUIRE(table.Size() == 0);
+
+  elementAtKeyRemoved = table.Erase("Yellow");
+  REQUIRE(elementAtKeyRemoved == false);
+  REQUIRE(table.Size() == 0);
 }
 
 TEST_CASE("Returns a Reference to the Element at the Provided Key.",
