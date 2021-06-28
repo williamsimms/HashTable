@@ -145,7 +145,7 @@ template <typename K, typename V, typename H>
 HashTable<K, V, H>& HashTable<K, V, H>::operator=(
     const HashTable<K, V, H>& otherTable) noexcept {
   if (this == &otherTable) {
-    return;
+    return *this;
   }
 
   this->Free();
@@ -169,7 +169,7 @@ template <typename K, typename V, typename H>
 HashTable<K, V, H>& HashTable<K, V, H>::operator=(
     HashTable<K, V, H>&& otherTable) noexcept {
   if (this == &otherTable) {
-    return;
+    return *this;
   }
 
   this->Free();

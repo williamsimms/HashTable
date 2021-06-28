@@ -48,26 +48,84 @@ TEST_CASE("Move Contructor", "[HashTable(HashTable<K,V,H>&&)]") {
 
 TEST_CASE("Copy Assignment Operator",
           "[HashTable<K, V, H>& operator=(const HashTable<K, V, H>&)]") {
-  //
+  HashTable<string, int> table;
+  table.Insert("hello", 1);
+  REQUIRE(table.Size() == 1);
+  REQUIRE(table.BucketCount() == 8);
+
+  HashTable<string, int> tableTwo;
+  tableTwo = table;
+  REQUIRE(tableTwo.Size() == 1);
+  REQUIRE(tableTwo.BucketCount() == 8);
+  REQUIRE(table == tableTwo);
 }
 
 TEST_CASE("Move Assignment Operator",
           "[HashTable<K, V, H>& operator=(HashTable<K, V, H>&&)]") {
-  //
+  HashTable<string, int> table;
+  table.Insert("hello", 1);
+  REQUIRE(table.Size() == 1);
+  REQUIRE(table.BucketCount() == 8);
+
+  HashTable<string, int> tableTwo;
+  tableTwo = std::move(table);
+  REQUIRE(tableTwo.Size() == 1);
+  REQUIRE(tableTwo.BucketCount() == 8);
+
+  REQUIRE(table.Size() == 0);
+  REQUIRE(table.BucketCount() == 0);
 }
 
 TEST_CASE(
     "Checks if the Hash Table is Empty, Return true if the Hash Table is "
     "Empty, returns false otherwise.",
     "[bool Empty() const]") {
-  //
+  HashTable<string, int> table;
+
+  bool isEmpty = table.Empty();
+  REQUIRE(isEmpty == true);
+
+  table.Insert("hello", 1);
+  REQUIRE(table.Size() == 1);
+  REQUIRE(table.BucketCount() == 8);
+
+  isEmpty = table.Empty();
+  REQUIRE(isEmpty == false);
 }
 
 TEST_CASE("Returns the Size of the Hash Table.", "[int Size() const]") {
-  //
+  HashTable<string, int> table;
+
+  table.Insert("hello", 1);
+  REQUIRE(table.Size() == 1);
+
+  table.Insert("hello", 1);
+  REQUIRE(table.Size() == 1);
+
+  table.Insert("Hi", 2);
+  REQUIRE(table.Size() == 2);
+
+  table.Insert("Hey", 3);
+  REQUIRE(table.Size() == 3);
 }
 
-TEST_CASE("Clears the HashTable, sets the size to zero.", "[void Clear()]") {
+TEST_CASE("Clears the HashTable, sets the size to zero and resets the memory.",
+          "[void Clear()]") {
+  HashTable<string, int> table;
+
+  bool isEmpty = table.Empty();
+  REQUIRE(isEmpty == true);
+
+  table.Insert("hello", 1);
+  REQUIRE(table.Size() == 1);
+  REQUIRE(table.BucketCount() == 8);
+
+  isEmpty = table.Empty();
+  REQUIRE(isEmpty == false);
+}
+
+TEST_CASE("Clears the HashTable, sets the size to zero & frees the memory.",
+          "[void Free()]") {
   //
 }
 
