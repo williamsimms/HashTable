@@ -246,47 +246,72 @@ TEST_CASE("Returns the Size of the bucket at the provided index.",
 
 TEST_CASE("Returns true if the element is in the HashTable, false otherwise.",
           "[bool Contains(const K&) const]") {
-  //
+  HashTable<string, int> table;
+  table.Insert("Hello", 2);
+
+  bool contains = table.Contains("Hello");
+  REQUIRE(contains == true);
+
+  contains = table.Contains("Hi");
+  REQUIRE(contains == false);
 }
 
 TEST_CASE("Retruns the amount of Buckets in the HashTable.",
           "[int BucketCount() const]") {
-  //
+  SECTION("Uses 8 as the default bucket size.") {
+    HashTable<string, int> table;
+    REQUIRE(table.BucketCount() == 8);
+  }
+
+  SECTION(
+      "Rounds up to the nearest multiple of 8, when a size is provided in the "
+      "constructor.") {
+    HashTable<string, int> table(100);
+    REQUIRE(table.BucketCount() == 104);
+  }
 }
 
 TEST_CASE("Retunrns the bucket at the specified key.",
           "[const LinkedList<K, V>& Bucket(const K&) const]") {
-  //
+  HashTable<string, int> table;
+  table.Insert("Hello", 5);
+  const LinkedList<string, int>& bucket = table.Bucket("Hello");
+  REQUIRE(bucket.Size() == 1);
+  REQUIRE(bucket.At(0)->value == 5);
 }
 
 TEST_CASE("Reserves the amount of buckets, provided in the parameter.",
           "[void Reserve(int)]") {
-  //
+  HashTable<string, int> table;
 }
 
 TEST_CASE(
     "Rehashes the Hash Table, increases the bucket size by three times its "
     "current size.",
     "[void Rehash()]") {
-  //
+  HashTable<string, int> table;
 }
 
 TEST_CASE("Checks if two provided keys are equal.",
           "[bool Key(const K&, const K&)]") {
-  //
+  HashTable<string, int> table;
+  string keyOne = "Hello";
+  string keyTwo = "Hi";
+  bool isEqual = table.Key(keyOne, keyTwo);
+  REQUIRE(isEqual == true);
 }
 
 TEST_CASE(
     "Returns a Reference to an Element in the HashTable. Can also be used to "
     "insert a new element in the HashTable.",
     "[V& operator[](const K&)]") {
-  //
+  HashTable<string, int> table;
 }
 
 TEST_CASE(
     "Returns true if the Two Hash Tables are Deeply Equal, false otherwise.",
     "[bool operator==(const HashTable<K, V, H>&) const]") {
-  //
+  HashTable<string, int> table;
 }
 
 TEST_CASE("Retuns the current Load Factor of the HashTable.",
