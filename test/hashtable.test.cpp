@@ -310,12 +310,27 @@ TEST_CASE(
     "insert a new element in the HashTable.",
     "[V& operator[](const K&)]") {
   HashTable<string, int> table;
+  table.Insert("Hello", 4);
+  REQUIRE(table["Hello"] == 4);
 }
 
 TEST_CASE(
     "Returns true if the Two Hash Tables are Deeply Equal, false otherwise.",
     "[bool operator==(const HashTable<K, V, H>&) const]") {
-  HashTable<string, int> table;
+  HashTable<string, int> tableOne;
+  HashTable<string, int> tableTwo;
+  HashTable<string, int> tableThree;
+  HashTable<string, int> tableFour;
+
+  tableOne.Insert("Hello", 5);
+  tableTwo.Insert("Hello", 5);
+  tableThree.Insert("Ok", 12);
+  tableFour.Insert("Hello", 11);
+
+  REQUIRE((tableOne == tableTwo) == true);
+  REQUIRE((tableTwo == tableThree) == false);
+  REQUIRE((tableOne == tableThree) == false);
+  REQUIRE((tableOne == tableFour) == false);
 }
 
 TEST_CASE("Retuns the current Load Factor of the HashTable.",
