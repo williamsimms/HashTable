@@ -283,6 +283,10 @@ TEST_CASE("Retunrns the bucket at the specified key.",
 TEST_CASE("Reserves the amount of buckets, provided in the parameter.",
           "[void Reserve(int)]") {
   HashTable<string, int> table;
+  REQUIRE(table.Size() == 0);
+  REQUIRE(table.BucketCount() == 8);
+  table.Reserve(100);
+  REQUIRE(table.BucketCount() == 104);
 }
 
 TEST_CASE(
@@ -295,10 +299,10 @@ TEST_CASE(
 TEST_CASE("Checks if two provided keys are equal.",
           "[bool Key(const K&, const K&)]") {
   HashTable<string, int> table;
-  string keyOne = "Hello";
-  string keyTwo = "Hi";
-  bool isEqual = table.Key(keyOne, keyTwo);
+  bool isEqual = table.Key("Hello", "Hello");
   REQUIRE(isEqual == true);
+  isEqual = table.Key("Hello", "Hi");
+  REQUIRE(isEqual == false);
 }
 
 TEST_CASE(

@@ -73,6 +73,7 @@ class HashTable {
 
   void Reserve(int);
   void Rehash();
+  void Rehash(int);
 
   [[nodiscard]] bool Key(const K&, const K&);
 
@@ -297,13 +298,36 @@ int HashTable<K, V, H>::Size() const {
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Reserve(int count) {
   int newBucketAmount = RoundUp(count, 8);
-  Resize(newBucketAmount);
+  Rehash(newBucketAmount);
 }
 
 template <typename K, typename V, typename H>
 void HashTable<K, V, H>::Rehash() {
   int oldBucketAmount = this->buckets;
   int newBucketAmount = oldBucketAmount * 3;
+  LinkedList<K, V>* newTable = new LinkedList<K, V>[newBucketAmount];
+  LinkedList<K, V>* oldTable = this->table;
+  this->table = newTable;
+  this->size = 0;
+  this->buckets = newBucketAmount;
+
+  for (int i = 0; i < oldBucketAmount; i++) {
+    LinkedList<K, V>& bucket = oldTable[i];
+    Node<K, V>* node = bucket.Head();
+
+    while (node != nullptr) {
+      Insert(node->key, std::move(node->value));
+      node = node->next;
+      bucket.PopFront();
+    }
+  }
+
+  delete[] oldTable;
+}
+
+template <typename K, typename V, typename H>
+void HashTable<K, V, H>::Rehash(int newBucketAmount) {
+  int oldBucketAmount = this->buckets;
   LinkedList<K, V>* newTable = new LinkedList<K, V>[newBucketAmount];
   LinkedList<K, V>* oldTable = this->table;
   this->table = newTable;
