@@ -53,6 +53,7 @@ class HashTable {
   void Free();
   void Insert(const K& key, const V& value);
   void Insert(const K& key, V&& value);
+  void Insert(std::pair<const K&, const V&>);
 
   template <typename... Args>
   void Emplace(const K&, Args&&...);
@@ -247,6 +248,25 @@ void HashTable<K, V, H>::Insert(const K& key, V&& value) {
   }
 
   bucket.PushBack(key, std::move(value));
+  this->size++;
+}
+
+template <typename K, typename V, typename H>
+void HashTable<K, V, H>::Insert(std::pair<const K&, const V&> pair) {
+  unsigned long long int hashedKey = Hash(pair.first);
+  LinkedList<K, V>& bucket = table[hashedKey];
+  Node<K, V>* node = bucket.Find(pair.first);
+
+  if (node) {
+    node->value = pair.second;
+    return;
+  }
+
+  if (LoadFactor() >= MaxLoadFactor()) {
+    Rehash();
+  }
+
+  bucket.PushBack(pair.first, std::move(pair.second));
   this->size++;
 }
 
