@@ -294,6 +294,23 @@ TEST_CASE(
     "current size.",
     "[void Rehash()]") {
   HashTable<string, int> table;
+  REQUIRE(table.Size() == 0);
+  REQUIRE(table.BucketCount() == 8);
+  table.Rehash();
+  REQUIRE(table.Size() == 0);
+  REQUIRE(table.BucketCount() == 24);
+}
+
+TEST_CASE(
+    "Rehashes the Hash Table, increases the bucket size by the amount "
+    "provided.",
+    "[void Rehash(int))]") {
+  HashTable<string, int> table;
+  REQUIRE(table.Size() == 0);
+  REQUIRE(table.BucketCount() == 8);
+  table.Rehash(100);
+  REQUIRE(table.Size() == 0);
+  REQUIRE(table.BucketCount() == 100);
 }
 
 TEST_CASE("Checks if two provided keys are equal.",
